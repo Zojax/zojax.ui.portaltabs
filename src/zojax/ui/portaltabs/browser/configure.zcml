@@ -1,0 +1,74 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.ui.portaltabs">
+  
+  <!-- portal tabs pageelement -->
+  <zojax:pageelement
+     title="Portal Tabs"
+     name="portal.tabs"
+     template="portaltabs.pt"
+     class=".portaltabs.PortalTabsView" 
+     layer="..interfaces.IPortalTabsLayer" />
+
+  <!-- configlet --> 
+  <browser:page
+     name="index.html"
+     for="..interfaces.IPortalTabsConfiglet"
+     class=".configlet.PortalTabsConfiglet"
+     permission="zojax.Configure" />
+
+  <!-- object tab -->
+  <browser:page
+     name="index.html"
+     for="..interfaces.IObjectPortalTab"
+     class=".objecttab.ObjectPortalTab"
+     permission="zojax.Configure" />
+
+  <!-- simple tab -->
+  <browser:page
+     name="addportaltab.html"
+     for="..interfaces.IPortalTabsConfiglet"
+     class=".simpletab.AddSimpleTabForm"
+     permission="zojax.Configure" />
+
+  <browser:page
+     name="index.html"
+     for="..interfaces.ISimplePortalTab"
+     class=".simpletab.EditPortalTab"
+     permission="zojax.Configure" />
+
+  <!-- edit form step -->
+  <zojax:pagelet
+     name="ui.portaltabs"
+     label="Portal tabs"
+     type="form.subform"
+     for="zojax.extensions.interfaces.IExtensible
+          zojax.content.forms.interfaces.IPresentationStep"
+     class=".edit.PortaltabsEdit"
+     weight="9999" 
+     layer="..interfaces.IPortalTabsLayer" />
+
+  <!-- icons -->
+  <browser:icon
+     name="zmi_icon"
+     file="portaltab.png"
+     for="..interfaces.IPortalTab" />
+
+  <zojax:resource
+     name="minus.gif"
+     file="minus.gif" />
+
+  <zojax:resource
+     name="plus.gif"
+     file="plus.gif" />
+
+  <!-- styles -->
+  <zojax:resourceinclude
+     name="zojax-ui-portaltabs.css"
+     library="zojax"
+     type="stylesheet"
+     file="styles.css" filetype="zrt" />
+
+</configure>

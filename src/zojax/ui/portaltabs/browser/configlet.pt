@@ -1,0 +1,32 @@
+<div class="z-frame" i18n:domain="zojax.ui.portaltabs"
+     tal:define="registered python:list(view.listRegistered())">
+  <h1 i18n:translate="">Registered tabs</h1>
+
+  <form tal:attributes="action request/URL" method="post">
+    <ul class="z-listing" tal:condition="registered">
+      <li tal:repeat="item registered">
+        <input type="checkbox" name="tabName:list"
+               tal:attributes="value python:item[0]" />
+	<a tal:define="tab python:item[1]; url tab/url;
+                       title tab/configlet_title|string:Unknown"
+	   tal:on-error="string:$title (Broken)"
+	   tal:attributes="href string:${view/configlet/@@absolute_url}/${tab/id}/">
+	  <tal:block tal:content="tab/configlet_title|string:Unknown" />
+	</a>
+      </li>
+    </ul>
+    <div tal:condition="not:registered" i18n:translate="">
+      There are no registered portal tabs.
+    </div>
+
+    <div class="z-form-controls">
+      <hr />
+      <input type="submit" class="z-form-addbutton" name="form.addTab" 
+	     value="Add Portal Tab" i18n:attributes="value" />
+
+      <input type="submit" class="z-form-removebutton"
+	     name="form.removeTab" value="Remove"
+	     tal:condition="registered" i18n:attributes="value" />
+    </div>
+  </form>
+</div>

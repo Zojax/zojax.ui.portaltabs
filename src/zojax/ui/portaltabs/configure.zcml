@@ -1,0 +1,69 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.ui.portaltabs">
+
+  <zojax:configlet
+     name="ui.portaltabs"
+     title="Portal tabs"
+     description="Portal tabs configuration."
+     class=".configlet.PortalTabsConfiglet"
+     schema=".interfaces.IPortalTabsConfiglet" />
+
+  <utility
+     name="portal.tabs"
+     factory=".vocabulary.TabsVocabulary" />
+
+  <utility
+     name="portal.topleveltabs"
+     factory=".vocabulary.ToplevelTabsVocabulary" />
+
+  <!-- skin layer -->
+  <zojax:layer
+     name="portaltabs"
+     layer=".interfaces.IPortalTabsLayer"
+     title="Customizable Portal Tabs"
+     description="Enable customizable portal tabs. Any content can be addd to portal tabs via 'presentation' tab." />
+
+  <!-- configlet publisher -->
+  <adapter
+     for=".interfaces.IPortalTabsConfiglet *"
+     factory="z3c.traverser.traverser.PluggableTraverser"
+     provides="zope.publisher.interfaces.IPublishTraverse" />
+
+  <!-- publisher plugin -->
+  <subscriber
+     provides="z3c.traverser.interfaces.ITraverserPlugin"
+     factory=".configlet.TraverserPlugin" />
+
+  <!-- simple tab -->
+  <class class=".simpletab.PortalTab">
+    <allow interface=".interfaces.ISimplePortalTab" />
+    <require
+       permission="zojax.Configure"
+       set_schema=".interfaces.ISimplePortalTab" />
+  </class>
+
+  <!-- cache -->
+  <subscriber handler=".cache.portalTabModified" />
+
+  <subscriber 
+     for=".interfaces.IPortalTab
+	  zope.app.container.interfaces.IObjectMovedEvent"
+     handler=".cache.portalTabModified" />
+
+  <subscriber 
+     for=".interfaces.IPortalTabsExtension
+	  zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+     handler=".cache.portalTabModified" />
+
+  <!-- content extensions -->
+  <include file="extension.zcml" />
+
+  <!-- browser views -->
+  <include package=".browser" />
+
+  <!-- portlets -->
+  <include package=".portlets" />
+
+</configure>

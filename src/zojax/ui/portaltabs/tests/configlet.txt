@@ -1,0 +1,101 @@
+Configlet
+=========
+
+    >>> from zope import interface, component
+    >>> from zope.app.component.hooks import getSite
+    >>> from zope.publisher.browser import TestRequest
+
+    >>> from zojax.ui.portaltabs import configlet, interfaces
+
+    >>> site = getSite()
+    >>> request = TestRequest()
+
+    >>> configlet = configlet.PortalTabsConfiglet()
+    >>> configlet.data = {}
+    >>> configlet.tabs = []
+
+No tabs
+
+    >>> dict(configlet.registered)
+    {}
+    >>> configlet.getTabs(site, request)
+    []
+
+
+register portal tab
+-------------------
+
+    >>> class PortalTab(object):
+    ...     interface.implements(interfaces.IPortalTab)
+    ...     
+    ...     def __init__(self, id, title, configlet_title):
+    ...         self.id = id
+    ...         self.title = title
+    ...         self.configlet_title = configlet_title
+    ...         
+    ...     def __bind__(self, context, request):
+    ...         self.context = context
+    ...         self.request = request
+    ...         return self
+    ...     
+    ...     
+    ...     def __repr__(self):
+    ...         return '<PortalTab %s>'%self.id
+
+    
+    >>> tab1 = PortalTab('', u'Portal tab1', 'Configlet tab1')
+    >>> configlet.registerTab(tab1)
+    >>> tab1.id != ''
+    True
+    >>> configlet.registered[tab1.id] == tab1
+    True
+
+    >>> tab2 = PortalTab('10', u'Portal tab2', 'Configlet tab2')
+    >>> configlet.registerTab(tab2)
+
+    >>> len(configlet.registered)
+    2
+    >>> len(configlet.tabs)
+    2
+
+    >>> configlet.getTab('10') is tab2
+    True
+
+    >>> configlet.getTabs(site, request)
+    [<PortalTab ...>, <PortalTab 10>]
+
+    >>> configlet.tabs = ['10']
+
+    >>> configlet.getTabs(site, request)
+    [<PortalTab 10>]
+
+
+unregister portal tab
+---------------------
+
+    >>> configlet.unregisterTab('10')
+    >>> configlet.getTabs(site, request)
+    []
+    >>> configlet.registered[tab1.id] == tab1
+    True
+    >>> configlet.unregisterTab(tab1.id)
+
+    >>> configlet.getTab('10') is None
+    True
+
+
+portal tab as utility
+---------------------
+
+    >>> component.provideUtility(tab2, name='10')
+    >>> configlet.getTab('10')
+    <PortalTab 10>
+
+    >>> configlet.getTabs(site, request)
+    []
+
+    >>> tabs = configlet.tabs
+    >>> tabs.append('10')
+    >>> configlet.tabs = tabs
+    >>> configlet.getTabs(site, request)
+    [<PortalTab 10>]
