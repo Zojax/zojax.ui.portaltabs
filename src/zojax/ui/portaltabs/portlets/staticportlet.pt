@@ -1,0 +1,31 @@
+<div class="z-portlet portlet-menutree-static" i18n:domain="zojax.ui.portaltabs"
+     tal:define="tabs context/tabs">
+
+  <h2 class="z-portlet-header" i18n:translate="" tal:content="python:context.label is None and context.title or context.label">Title</h2>
+
+  <div class="z-portlet-body">
+    <div class="z-portlet-item"
+         tal:repeat="tab tabs"
+         tal:attributes="class python:tab['tab'].isSelected() and 'selected' or ''">
+      <a tal:attributes="href tab/tab/url"
+         tal:content="tab/tab/title" />
+      <metal:block use-macro="view/template/macros/submenu" />
+    </div>
+  </div>
+
+</div>
+
+<tal:block condition="nothing">
+<metal:block define-macro="submenu">
+  <ul class="portlet-menutree-static-second" tal:attributes="class string:portlet-menutree-static-second-${tab/level}" tal:condition="tab/submenu">
+    <li tal:repeat="tab tab/submenu"
+        tal:attributes="class python:tab['tab'].isSelected() and 'globalnav-tab-selected' or ''">
+        <a tal:attributes="href tab/tab/url"
+           tal:content="tab/tab/title" />
+        <metal:block use-macro="view/template/macros/submenu" />
+    </li>
+  </ul>
+
+  <div class="visualClear"></div>
+</metal:block>
+</tal:block>

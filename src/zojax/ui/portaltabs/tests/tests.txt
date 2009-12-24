@@ -1,0 +1,269 @@
+===========
+Portal Tabs
+===========
+
+    >>> from zope import component, interface
+    >>> from zope.testbrowser.testing import Browser
+    >>> from zope.app.intid import IntIds
+    >>> from zope.app.intid.interfaces import IIntIds
+    >>> from zope.app.testing.functional import getRootFolder
+    >>> from zojax.extensions.interfaces import IExtensible
+
+    >>> root = getRootFolder()
+    >>> rootId = root['intids'].getId(root)
+    >>> siteManager = root.getSiteManager()
+
+    >>> interface.alsoProvides(root, IExtensible)
+
+Empty portal tabs
+
+    >>> actor = Browser()
+    >>> actor.handleErrors = False
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html...
+    ...
+    <div id="z-portal-tabs">
+    </div>
+    ...
+    </html>
+
+configlet is available
+
+    >>> actor.addHeader("Authorization", "Basic mgr:mgrpw")
+    >>> actor.open("http://localhost/settings/")
+    >>> 'Portal tabs' in actor.contents
+    True
+
+Register portal tab for content
+
+    >>> actor.open("http://localhost/++extensions++/")
+    >>> actor.getLink('Portal tabs').click()
+    >>> actor.getControl(name='form.widgets.tabtitle').value = u'Test portal tab'
+    >>> actor.getControl(name='form.widgets.enabled:list').value = ['true']
+    >>> actor.getControl(name='form.widgets.visible:list').value = ['true']
+    >>> actor.getControl(name='form.buttons.save').click()
+
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html>
+      ...
+      <body>
+        <div id="z-portal-tabs">
+          <ul>
+            <li class="selected">
+              <a href="http://localhost/">
+          <span>Test portal tab</span></a>
+            </li>
+          </ul>
+        </div>
+    ...
+    </html>
+
+    >>> actor.open("http://localhost/++extensions++/")
+    >>> actor.getLink('Portal tabs').click()
+    >>> actor.getControl(name='form.widgets.tabtitle').value = u'Site portal tab'
+    >>> actor.getControl(name='form.widgets.enabled:list').value = ['true']
+    >>> actor.getControl(name='form.buttons.save').click()
+
+    >>> actor.open("http://localhost/test.html")
+    >>> print actor.contents
+    <html>
+    ...
+    <div id="z-portal-tabs">
+      <ul>
+        <li class="selected">
+          <a href="http://localhost/">
+      <span>Site portal tab</span></a>
+        </li>
+      </ul>
+    </div>
+    ...
+    </html>
+
+    >>> actor.open("http://localhost/settings/")
+    >>> actor.getLink('Portal tabs').click()
+    >>> actor.getControl(name='form.removeTab').click()
+    >>> print actor.contents
+    <html...
+    ...<div class="statusWarningMessage">Please select one of listed tabs.</div>...
+    </html>
+
+    >>> actor.getControl(name='tabName:list').value=[rootId]
+    >>> actor.getControl(name='form.removeTab').click()
+
+    >>> actor.open("http://localhost/++skin++DefaultSkin/test.html")
+    >>> print actor.contents
+    <html>
+      ...
+      <body>
+        <div id="z-portal-tabs">
+        </div>
+    ...
+    </html>
+
+Enable tab for content
+----------------------
+
+We should not see portaltabs extension without extension support for object:
+
+    >>> actor.open('http://localhost/content/context.html')
+    >>> actor.getLink('Presentation').click()
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+So we should enable extension support:
+    >>> interface.alsoProvides(root['content'], IExtensible)
+
+    >>> actor.open('http://localhost/content/context.html')
+    >>> actor.getLink('Presentation').click()
+    >>> actor.getControl('Title').value = 'Some Tab'
+    >>> actor.getControl(name='ui.portaltabs.widgets.enabled:list').value = ['true']
+    >>> actor.getControl(name='ui.portaltabs.widgets.visible:list').value = ['true']
+    >>> actor.getControl('Save').click()
+
+We see registered tab in configlet
+
+    >>> actor.open("http://localhost/settings/")
+    >>> actor.getLink('Portal tabs').click()
+    >>> print actor.contents
+    <html>
+      ...
+      <body>
+        ...
+        <select id="form-widgets-tabs-to"
+                  name="form.widgets.tabs.to" class="list-field"
+                  multiple="multiple" size="5">
+            <option value="...">Some Tab</option>
+          </select>
+       ...
+    </html>
+
+    >>> actor.open('http://localhost/content/context.html')
+    >>> actor.getLink('View').click()
+
+    >>> print actor.contents
+    <html>
+      ...
+      <body>
+        <div id="z-portal-tabs">
+          <ul>
+            <li class="selected">
+              <a href="http://localhost/content/">
+          <span>Some Tab</span></a>
+            </li>
+          </ul>
+        </div>
+    ...
+    </html>
+
+Menu Tree Portlet
+
+    >>> actor.open("http://localhost/testportlet.html")
+    >>> print actor.contents
+    <html>
+    ...
+    <script type="text/javascript" src="http://localhost/.../zojax.ui.portaltabs.js"></script>
+    <script type="text/javascript">
+        menu.onload = function (){
+        menu.loadtree('http://localhost/', 'http://localhost/', '', 0);
+      };
+      if (window.addEventListener)
+          window.addEventListener("load", menu.onload, false);
+      if (window.attachEvent)
+          window.attachEvent("onload", menu.onload)
+    </script>
+    ...
+    ...<div class="z-portlet portlet-menutree">
+      <h2 class="z-portlet-header">Menu</h2>
+      <div class="z-portlet-body">
+        <div xmlns="http://www.zope.org/zope3xmltree" id="menutreecontents" class="z-portlet-item" onclick="menu.treeclicked(event);">Loading...</div>
+      </div>
+    </div>...
+    ...
+    </html>
+
+Static Menu Tree Portlet
+
+    >>> actor.open("http://localhost/testportletstatic.html")
+    >>> print actor.contents
+    <html>
+    ...
+    ...<div class="z-portlet portlet-menutree-static">
+      <h2 class="z-portlet-header">Menu (Static)</h2>
+      <div class="z-portlet-body">
+        ...
+      </div>
+    ...
+    </html>
+
+
+We can add Simple tabs without having it to be real objects, just external links
+or not links
+
+    >>> actor.open("http://localhost/settings/")
+    >>> actor.getLink('Portal tabs').click()
+    >>> actor.getControl('Add Portal Tab').click()
+    >>> actor.getControl('Title').value = 'Google'
+    >>> actor.getControl('Add').click()
+    >>> actor.url
+    'http://localhost/settings/ui/portaltabs/.../'
+
+We see tabs
+
+    >>> actor.open('http://localhost/content')
+    >>> print actor.contents
+    <html>
+      ...
+      <body>
+        <div id="z-portal-tabs">
+          <ul>
+            <li class="selected">
+              <a href="http://localhost/content/">
+          <span>Some Tab</span></a>
+            </li>
+            <li class="">
+                <a>
+                  <span>Google</span></a>
+            </li>
+          </ul>
+        </div>
+    ...
+    </html>
+
+    >>> actor.open("http://localhost/settings/")
+    >>> actor.getLink('Portal tabs').click()
+    >>> actor.getControl('Add Portal Tab').click()
+    >>> actor.getControl('Title').value = 'External Site'
+    >>> actor.getControl('URL').value = 'http://www.google.com'
+    >>> actor.getControl('Add').click()
+    >>> actor.url
+    'http://localhost/settings/ui/portaltabs/.../'
+
+We see tabs
+
+    >>> actor.open('http://localhost/content')
+    >>> print actor.contents
+    <html>
+      ...
+      <body>
+        <div id="z-portal-tabs">
+          <ul>
+            <li class="selected">
+              <a href="http://localhost/content/">
+          <span>Some Tab</span></a>
+            </li>
+            <li class="">
+                <a>
+                  <span>Google</span></a>
+            </li>
+            <li class="">
+                <a href="http://www.google.com">
+            <span>External Site</span></a>
+              </li>
+          </ul>
+        </div>
+    ...
+    </html>
+

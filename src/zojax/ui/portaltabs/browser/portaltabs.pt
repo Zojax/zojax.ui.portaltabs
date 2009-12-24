@@ -1,0 +1,9 @@
+<div id="z-portal-tabs" tal:define="tabs view/tabs">
+  <ul tal:condition="tabs">
+    <li tal:repeat="tab tabs"
+	tal:attributes="class python:tab.isSelected() and 'selected' or ''">
+      <a tal:attributes="href tab/url">
+	<span tal:content="tab/title"></span></a>
+    </li>
+  </ul>
+</div>
