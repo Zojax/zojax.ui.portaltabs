@@ -1,0 +1,23 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.ui.portaltabs">
+
+  <zojax:extension
+     name="zojax.portaltabs"
+     title="Portal tabs"
+     description="Portal tabs management."
+     schema=".interfaces.IPortalTabsExtension"
+     class=".extension.PortalTabsExtension"
+     type="zojax.extensions.interfaces.IPageExtension"
+     permission="zojax.ManagePageExtention"
+     layer=".interfaces.IPortalTabsLayer" />
+
+  <class class=".extension.ObjectPortalTab">
+    <allow interface=".interfaces.IObjectPortalTab" />
+    <require
+       permission="zojax.Configure"
+       set_schema=".interfaces.IObjectPortalTab" />
+  </class>
+
+</configure>

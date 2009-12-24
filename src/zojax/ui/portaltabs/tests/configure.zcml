@@ -1,0 +1,34 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax">
+
+  <interface
+     name="DefaultSkin"
+     interface=".tests.IDefaultSkin"
+     type="zope.publisher.interfaces.browser.IBrowserSkinType" />
+
+  <permission
+     id="zojax.test.View"
+     title="Test view" />
+
+  <zojax:pagelet
+     name="test.html"
+     for="*"
+     template="test.pt"
+     permission="zope.Public" />
+
+ <zojax:pagelet
+     name="testportlet.html"
+     for="*"
+     template="testportlet.pt"
+     permission="zope.Public" />
+
+ <zojax:pagelet
+     name="testportletstatic.html"
+     for="*"
+     template="testportletstatic.pt"
+     permission="zope.Public" />
+
+</configure>

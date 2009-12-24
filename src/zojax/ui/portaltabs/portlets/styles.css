@@ -1,0 +1,46 @@
+/* zrt-cssregistry: */
+
+
+/* Styles for xmltree */
+
+#menutreecontents a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#menutreecontents loading {
+  display: block;
+  padding-left: 31px;
+  height: 18px;
+}
+
+#menutreecontents expand {
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding-left: 14px;
+  display: inline;
+  cursor: pointer;
+}
+
+#menutreecontents expand:hover {
+  background-color: globalBackgroundColor;
+}
+
+
+#menutreecontents icon {
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding-left: 20px;
+  display: inline;
+  cursor: auto;
+}
+
+#menutreecontents icon.selected {
+  background-color: globalBackgroundColor;
+}
+
+#menutreecontents collection {
+  display: block;
+  margin-left: 10px;
+  height: auto;
+}

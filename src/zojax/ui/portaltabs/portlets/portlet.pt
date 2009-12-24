@@ -1,0 +1,13 @@
+<div class="z-portlet portlet-menutree" i18n:domain="zojax.ui.portaltabs">
+
+  <h2 class="z-portlet-header" i18n:translate="" tal:content="context/title">Title</h2>
+
+  <div class="z-portlet-body">
+    <div xmlns="http://www.zope.org/zope3xmltree"
+         id="menutreecontents"
+         class="z-portlet-item"
+         onclick="menu.treeclicked(event);"
+         i18n:translate="">Loading...</div>
+  </div>
+
+</div>

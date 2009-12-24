@@ -1,0 +1,134 @@
+# #############################################################################
+#
+# Copyright (c) 2009 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Sat Nov 22 03:03:08 2008\n"
+"PO-Revision-Date: 2008-10-14 17:25+0100\n"
+"Last-Translator: F. Kooman <fkooman@tuxed.net>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/ui/portaltabs/browser/configlet.pt:13
+msgid "(Broken)"
+msgstr ""
+
+#: src/zojax/ui/portaltabs/browser/configlet.pt:17
+#, fuzzy
+msgid "There are no registered portal tabs."
+msgstr "Er zijn geen elke gedefinieerde eigenschappen."
+
+#: src/zojax/ui/portaltabs/browser/configlet.pt:26
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: src/zojax/ui/portaltabs/browser/configlet.pt:3
+msgid "Registered tabs"
+msgstr ""
+
+#: src/zojax/ui/portaltabs/browser/configlet.py:54
+msgid "Please select one of listed tabs."
+msgstr "Selecteer een van de genoemde menu-items"
+
+#: src/zojax/ui/portaltabs/browser/configlet.py:60
+msgid "Selected tabs have been removed."
+msgstr "Geselecteerde menu-items zijn verwijderd."
+
+#: src/zojax/ui/portaltabs/browser/configure.zcml:13
+#, fuzzy
+msgid "Portal Tabs"
+msgstr "Websitemenu"
+
+#: src/zojax/ui/portaltabs/browser/objecttab.py:35
+#: src/zojax/ui/portaltabs/browser/simpletab.py:59
+msgid "Modify portal tab"
+msgstr "Menu-item wijzigen"
+
+#: src/zojax/ui/portaltabs/browser/objecttab.py:41
+#: src/zojax/ui/portaltabs/browser/simpletab.py:65
+msgid "Back"
+msgstr "Terug"
+
+#: src/zojax/ui/portaltabs/browser/simpletab.py:36
+#: src/zojax/ui/portaltabs/browser/configlet.pt:23
+msgid "Add Portal Tab"
+msgstr "Menu-item toevoegen"
+
+#: src/zojax/ui/portaltabs/configure.zcml:8
+msgid "Portal tabs configuration."
+msgstr "Website menu configuratie"
+
+#: src/zojax/ui/portaltabs/configure.zcml:8
+#: src/zojax/ui/portaltabs/extension.zcml:6
+msgid "Portal tabs"
+msgstr "Websitemenu"
+
+#: src/zojax/ui/portaltabs/extension.zcml:6
+msgid "Portal tabs management."
+msgstr "Website menu-items beheer"
+
+#: src/zojax/ui/portaltabs/interfaces.py:106
+#: src/zojax/ui/portaltabs/interfaces.py:125
+msgid "Submenu portal tabs"
+msgstr "Submenu menu-items"
+
+#: src/zojax/ui/portaltabs/interfaces.py:107
+#: src/zojax/ui/portaltabs/interfaces.py:126
+msgid "Select tabs that will be visible as submenu."
+msgstr "Selecteer menu-items die zichtbaar zijn als submenu."
+
+#: src/zojax/ui/portaltabs/interfaces.py:120
+msgid "URL"
+msgstr ""
+
+#: src/zojax/ui/portaltabs/interfaces.py:121
+msgid "Define url mapper for content."
+msgstr "Definieer url mapper voor de inhoud."
+
+#: src/zojax/ui/portaltabs/interfaces.py:55
+msgid "Enabled portal tabs"
+msgstr "Gebruik menu-items"
+
+#: src/zojax/ui/portaltabs/interfaces.py:56
+msgid "Select tabs that will be visible in portal tabs menu."
+msgstr "Selecteer menu-items die zichtbaar zijn in website menu"
+
+#: src/zojax/ui/portaltabs/interfaces.py:80
+#: src/zojax/ui/portaltabs/interfaces.py:101
+msgid "Title"
+msgstr "Titel"
+
+#: src/zojax/ui/portaltabs/interfaces.py:81
+#: src/zojax/ui/portaltabs/interfaces.py:102
+msgid "Select title for portal tab."
+msgstr "Selecteer titel voor website menu-item"
+
+#: src/zojax/ui/portaltabs/interfaces.py:85
+msgid "Enable"
+msgstr "Inschakellen "
+
+#: src/zojax/ui/portaltabs/interfaces.py:86
+msgid "Enable portal tab for this object."
+msgstr "Schakel menu-item voor dit object."
+
+#: src/zojax/ui/portaltabs/interfaces.py:91
+msgid "Visible"
+msgstr "Zichtbaar"
+
+#: src/zojax/ui/portaltabs/interfaces.py:92
+msgid "Visible portal tab for this object."
+msgstr ""

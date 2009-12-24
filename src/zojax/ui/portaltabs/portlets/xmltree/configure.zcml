@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
+
+  <!-- settings view -->
+  <browser:page
+     name="zojax.ui.portaltabs"
+     for="*"
+     permission="zope.Public"
+     class=".view.PortalTabsView" />
+
+  <browser:pages
+      for="*"
+      permission="zope.View"
+      class=".xmlobject.XmlObjectView">
+    <browser:page
+        name="menuChildren.xml"
+        attribute="children"
+        />
+    <browser:page
+        name="menuSingleBranchTree.xml"
+        attribute="singleBranchTree"
+        />
+  </browser:pages>
+
+</configure>

@@ -1,0 +1,54 @@
+tabs vocabulary
+---------------
+
+    >>> from zope import interface, component
+    >>> from zope.app.component.hooks import getSite
+    >>> from zojax.ui.portaltabs import configlet, vocabulary, interfaces
+
+    >>> site = getSite()
+
+    >>> configlet = configlet.PortalTabsConfiglet()
+    >>> configlet.data = {}
+    >>> configlet.tabs = []
+    >>> component.provideUtility(configlet)
+
+    >>> factory = vocabulary.TabsVocabulary()
+
+    >>> len(factory(site))
+    0
+
+register tabs
+
+    >>> class PortalTab(object):
+    ...     interface.implements(interfaces.IPortalTab)
+    ...     
+    ...     def __init__(self, id, title, configlet_title):
+    ...         self.id = id
+    ...         self.title = title
+    ...         self.configlet_title = configlet_title
+    ...         
+    ...     def __bind__(self, context, request):
+    ...         self.context = context
+    ...         self.request = request
+    ...         return self
+    ...     
+    ...     def __repr__(self):
+    ...         return '<PortalTab %s>'%self.id
+
+    >>> tab1 = PortalTab('1', u'Portal tab1', 'Configlet tab1')
+    >>> component.provideUtility(tab1, name='1')
+
+    >>> tab2 = PortalTab('2', u'Portal tab2', 'Configlet tab2')
+    >>> configlet.registerTab(tab2)
+
+    >>> voc = factory(site)
+    >>> for term in voc:
+    ...     print '%s: %s'%(term.value, term.title)
+    1: Configlet tab1
+    2: Configlet tab2
+
+    >>> voc.getTerm('1').value
+    u'1'
+
+    >>> voc.getTerm('unknown').value
+    u'1'
