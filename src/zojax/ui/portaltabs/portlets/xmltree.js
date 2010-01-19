@@ -2,36 +2,8 @@ menu = {
     version :"1.0"
 };
 
-// constants
-menu.ELEMENT_NODE = 1;
-menu.TEXT_NODE = 3;
-menu.COLLECTION = 'COLLECTION';
-menu.ICON = 'ICON';
-menu.EXPAND = 'EXPAND';
-menu.XML_PUBLISHER_VIEW = 'zojax.ui.portaltabs'
-menu.XML_CHILDREN_VIEW = '@@menuChildren.xml';
-menu.SINGLE_BRANCH_TREE_VIEW = '@@menuSingleBranchTree.xml';
-menu.CONTENT_VIEW = '@@SelectedManagementView.html';
-menu.NUM_TEMPLATE = '$${num}';
-
-menu.LG_DEBUG = 6;
-menu.LG_TRACE_EVENTS = 5;
-menu.LG_TRACE = 4;
-menu.LG_INFO = 3;
-menu.LG_NOLOG = 0;
-
-// globals
-menu.loadingMsg = 'Loading...';
-menu.abortMsg = 'Unavailable';
-menu.titleTemplate = 'Contains ' + menu.NUM_TEMPLATE + ' item(s)';
-menu.baseurl;
-menu.navigationTree;
-menu.docNavTree;
-menu.loglevel = menu.LG_NOLOG;
-menu.hideSiblings = 0;
-
 // class menu.navigationTreeNode
-menu.navigationTreeNode = function(domNode) {
+menu.navigationTreeNode = function(menu, domNode) {
     this.childNodes = new Array();
     this.isEmpty = 1;
     this.isCollapsed = 1;
@@ -40,6 +12,7 @@ menu.navigationTreeNode = function(domNode) {
     this.path = '';
     this.parentNode = null;
     this.isRoot = 0;
+    this.menu = menu
 }
 
 menu.navigationTreeNode.prototype.appendChild = function(node) {
@@ -59,7 +32,7 @@ menu.navigationTreeNode.prototype.setIsRoot = function(isRoot) {
 }
 
 menu.navigationTreeNode.prototype.setSelected = function() {
-    var items = menu.navigationTree.domNode.getElementsByTagName('icon')
+    var items = this.menu.navigationTree.domNode.getElementsByTagName('icon')
     for ( var i = 0; i < items.length; i++) {
         items[i].className = '';
     }
@@ -79,7 +52,7 @@ menu.navigationTreeNode.prototype.expand = function() {
 
 menu.navigationTreeNode.prototype.changeExpandIcon = function(icon) {
     var expand = this.domNode.getElementsByTagName('expand')[0];
-    expand.style.backgroundImage = 'url("' + menu.baseurl + '@@/' + icon + '.gif")';
+    expand.style.backgroundImage = 'url("' + this.menu.baseurl + '@@/' + icon + '.gif")';
     expand.className= icon
 }
 
@@ -176,8 +149,47 @@ menu.navigationTreeNode.prototype.showChildren = function() {
     }
 }
 
+menu.MenuTree = function(id, rooturl, thismenubaseurl, fromtab, hidesliblings) {
+    // constants
+    this.ELEMENT_NODE = 1;
+    this.TEXT_NODE = 3;
+    this.COLLECTION = 'COLLECTION';
+    this.ICON = 'ICON';
+    this.EXPAND = 'EXPAND';
+    this.XML_PUBLISHER_VIEW = 'zojax.ui.portaltabs'
+    this.XML_CHILDREN_VIEW = '@@menuChildren.xml';
+    this.SINGLE_BRANCH_TREE_VIEW = '@@menuSingleBranchTree.xml';
+    this.CONTENT_VIEW = '@@SelectedManagementView.html';
+    this.NUM_TEMPLATE = '$${num}';
+
+    this.LG_DEBUG = 6;
+    this.LG_TRACE_EVENTS = 5;
+    this.LG_TRACE = 4;
+    this.LG_INFO = 3;
+    this.LG_NOLOG = 0;
+
+    // globals
+    this.loadingMsg = 'Loading...';
+    this.abortMsg = 'Unavailable';
+    this.titleTemplate = 'Contains ' + this.NUM_TEMPLATE + ' item(s)';
+    this.navigationTree;
+    this.loglevel = this.LG_NOLOG;
+    
+    this.baseurl = rooturl; // Global menu.baseurl
+    this.docNavTree = document.getElementById(id);
+    if (!this.docNavTree)
+        return
+    this.hideSiblings = hidesliblings;
+    var url = thismenubaseurl + this.SINGLE_BRANCH_TREE_VIEW;
+    if (fromtab) {
+        url = this.XML_PUBLISHER_VIEW + '/' + fromtab + '/' + this.SINGLE_BRANCH_TREE_VIEW;
+    }
+    this.loadtreexml(url, null);
+
+}
+
 // utilities
-menu.prettydump = function(s, locallog) {
+menu.MenuTree.prototype.prettydump = function(s, locallog) {
     // Put the string "s" in a box on the screen as an log message
     if (locallog > menu.loglevel)
         return;
@@ -188,12 +200,15 @@ menu.prettydump = function(s, locallog) {
     var br2 = document.createElement('br');
     var msg_text = document.createTextNode(s);
     msg.appendChild(msg_text);
+    if (!logger) {
+        return
+    }
     logger.insertBefore(br1, logger.firstChild);
     logger.insertBefore(br2, logger.firstChild);
     logger.insertBefore(msg, logger.firstChild);
 }
 
-menu.debug = function(s) {
+menu.MenuTree.prototype.debug = function(s) {
     var oldlevel = menu.loglevel;
     menu.loglevel = menu.LG_DEBUG;
     menu.prettydump("Debug : " + s, menu.LG_DEBUG);
@@ -201,7 +216,7 @@ menu.debug = function(s) {
 }
 
 // DOM utilities
-menu.getTreeEventTarget = function(e) {
+menu.MenuTree.prototype.getTreeEventTarget = function(e) {
     var elem;
     if (e.target) {
         // Mozilla uses this
@@ -216,23 +231,23 @@ menu.getTreeEventTarget = function(e) {
     return elem;
 }
 
-menu.isCollection = function(elem) {
-    return menu.checkTagName(elem, menu.COLLECTION);
+menu.MenuTree.prototype.isCollection = function(elem) {
+    return this.checkTagName(elem, this.COLLECTION);
 }
 
-menu.isIcon = function(elem) {
-    return menu.checkTagName(elem, menu.ICON);
+menu.MenuTree.prototype.isIcon = function(elem) {
+    return this.checkTagName(elem, this.ICON);
 }
 
-menu.isExpand = function(elem) {
-    return menu.checkTagName(elem, menu.EXPAND);
+menu.MenuTree.prototype.isExpand = function(elem) {
+    return this.checkTagName(elem, this.EXPAND);
 }
 
-menu.checkTagName = function(elem, tagName) {
+menu.MenuTree.prototype.checkTagName = function(elem, tagName) {
     return elem.tagName.toUpperCase() == tagName;
 }
 
-menu.getCollectionChildNodes = function(xmlDomElem) {
+menu.MenuTree.prototype.getCollectionChildNodes = function(xmlDomElem) {
     // get collection element nodes among childNodes of elem
     var result = new Array();
 
@@ -242,7 +257,7 @@ menu.getCollectionChildNodes = function(xmlDomElem) {
     for ( var i = 0; i < numitems; i++) {
         currentItem = items[i];
 
-        if (currentItem.nodeType == menu.ELEMENT_NODE) {
+        if (currentItem.nodeType == this.ELEMENT_NODE) {
             result.push(currentItem);
         }
     }
@@ -250,104 +265,31 @@ menu.getCollectionChildNodes = function(xmlDomElem) {
 }
 
 // events
-menu.treeclicked = function(e) {
-    menu.prettydump('menu.treeclicked', menu.LG_TRACE_EVENTS);
-    var elem = menu.getTreeEventTarget(e);
-    if (elem.id == 'menutree')
-        return;
-
+menu.MenuTree.prototype.treeclicked = function(e) {
+    this.prettydump('menu.treeclicked', this.LG_TRACE_EVENTS);
+    var elem = this.getTreeEventTarget(e);
+    if (elem.id == 'menutree') {
+        return
+    }
     // if node clicked is expand elem, toggle expansion
-    if (menu.isExpand(elem) && !elem.getAttribute('disabled')) {
+    if (this.isExpand(elem) && !elem.getAttribute('disabled')) {
         // get collection node
         elem = elem.parentNode;
-        var navTreeNode = menu.navigationTree.getNodeByPath(elem
-                .getAttribute('path'));
+        var navTreeNode = this.navigationTree.getNodeByPath(elem.getAttribute('path'));
         navTreeNode.toggleExpansion();
     }
 }
 
-// helpers
-menu.getControlPrefix = function() {
-    if (menu.getControlPrefix.prefix)
-        return menu.getControlPrefix.prefix;
-
-    var prefixes = [ "MSXML2", "Microsoft", "MSXML", "MSXML3" ];
-    var o, o2;
-    for ( var i = 0; i < prefixes.length; i++) {
-        try {
-            // try to create the objects
-            o = new ActiveXObject(prefixes[i] + ".menu.XmlHttp");
-            o2 = new ActiveXObject(prefixes[i] + ".XmlDom");
-            return menu.getControlPrefix.prefix = prefixes[i];
-        } catch (ex) {
-        }
-        ;
-    }
-
-    throw new Error("Could not find an installed XML parser");
+menu.MenuTree.prototype.loadtreexml = function(url, node) {
+    this.prettydump('URL ' + url, this.LG_INFO);
+    var parseXML = this.parseXML;
+    var instance = this;
+    $.get(url, function(data) {
+        parseXML(instance, data, node)
+    });
 }
 
-// menu.XmlHttp factory
-menu.XmlHttp = function() {
-}
-
-menu.XmlHttp.create = function() {
-    if (window.XMLHttpRequest) {
-        var req = new XMLHttpRequest();
-
-        // some older versions of Moz did not support the readyState property
-        // and the onreadystate event so we patch it!
-        if (req.readyState == null) {
-            req.readyState = 1;
-            req.addEventListener("load", function() {
-                req.readyState = 4;
-                if (typeof req.onreadystatechange == "function")
-                    req.onreadystatechange();
-            }, false);
-        }
-
-        return req;
-    }
-    if (window.ActiveXObject) {
-        s = menu.getControlPrefix() + '.menu.XmlHttp';
-        return new ActiveXObject(menu.getControlPrefix() + ".menu.XmlHttp");
-    }
-    return;
-};
-
-menu.loadtreexml = function(url, node, fromtab) {
-    var xmlHttp = menu.XmlHttp.create();
-    if (!xmlHttp)
-        return;
-    menu.prettydump('URL ' + url, menu.LG_INFO);
-    xmlHttp.open('GET', url, true);
-
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState != 4)
-            return;
-        menu.prettydump('Response XML ' + xmlHttp.responseText, menu.LG_INFO);
-        menu.parseXML(xmlHttp.responseXML, node, fromtab);
-    };
-
-    // call in new thread to allow ui to update
-    window.setTimeout( function() {
-        xmlHttp.send(null);
-    }, 10);
-}
-
-menu.loadtree = function(rooturl, thismenubaseurl, fromtab, hidesliblings) {
-    menu.baseurl = rooturl; // Global menu.baseurl
-    menu.docNavTree = document.getElementById('menutreecontents');
-    menu.hideSiblings = hidesliblings;
-    var url = thismenubaseurl + menu.SINGLE_BRANCH_TREE_VIEW;
-    if (fromtab) {
-        url = menu.XML_PUBLISHER_VIEW + '/' + fromtab + '/' + menu.SINGLE_BRANCH_TREE_VIEW;
-    }
-    menu.loadtreexml(url, null, fromtab);
-
-}
-
-menu.removeChildren = function(node) {
+menu.MenuTree.prototype.removeChildren = function(node) {
     var items = node.childNodes;
     var numitems = items.length;
     for ( var i = 0; i < numitems; i++) {
@@ -355,26 +297,26 @@ menu.removeChildren = function(node) {
     }
 }
 
-menu.parseXML = function(responseXML, node) {
+menu.MenuTree.prototype.parseXML = function(instance, responseXML, node) {
     if (responseXML) {
         var data = responseXML.documentElement;
         if (node == null) {
             // [top] node
-            menu.removeChildren(menu.docNavTree);
-            menu.titleTemplate = data.getAttribute('title_tpl');
-            menu.loadingMsg = data.getAttribute('loading_msg');
-            menu.addNavigationTreeNodes(data, null, 1);
+            instance.removeChildren(instance.docNavTree);
+            instance.titleTemplate = data.getAttribute('title_tpl');
+            instance.loadingMsg = data.getAttribute('loading_msg');
+            instance.addNavigationTreeNodes(data, null, 1);
             // menu.docNavTree.appendChild(menu.navigationTree.domNode);
         } else {
             // expanding nodes
-            menu.addNavigationTreeNodes(data, node, 0);
+            instance.addNavigationTreeNodes(data, node, 0);
             node.finishLoadingChildren();
         }
     } else {
         // no XML response, reset the loadingNode
         if (node == null) {
             // unable to retrieve [top] node
-            menu.docNavTree.innerHTML = menu.abortMsg;
+            instance.docNavTree.innerHTML = this.abortMsg;
         } else {
             // abort expanding nodes
             node.abortLoadingChildren()
@@ -382,26 +324,30 @@ menu.parseXML = function(responseXML, node) {
     }
 }
 
-menu.addNavigationTreeNodes = function(sourceNode, targetNavTreeNode, deep) {
+menu.MenuTree.prototype.addNavigationTreeNodes = function(sourceNode, targetNavTreeNode, deep) {
     // create tree nodes from XML children nodes of sourceNode
     // and add them to targetNode
     // if deep, create all descendants of sourceNode
     var basePath = "";
-    var items = menu.getCollectionChildNodes(sourceNode);
+    var items = this.getCollectionChildNodes(sourceNode);
     var numitems = items.length;
     for ( var i = 0; i < numitems; i++) {
-        var navTreeChild = menu.createNavigationTreeNode(items[i], basePath,
+        var navTreeChild = this.createNavigationTreeNode(items[i], basePath,
                 deep);
         if (targetNavTreeNode)
             targetNavTreeNode.appendChild(navTreeChild);
     }
 }
 
-menu.createPresentationNodes = function(title, targetUrl, icon_url, length) {
+menu.MenuTree.prototype.createPresentationNodes = function(title, targetUrl, icon_url, length) {
     // create nodes hierarchy for one collection (without children)
 
     // create elem for plus/minus icon
     var expandElem = document.createElement('expand');
+    var instance = this;
+    $(expandElem).click(function (e) {
+        instance.treeclicked(e)
+    });
     // create elem for item icon
     var iconElem = document.createElement('icon');
     expandElem.appendChild(iconElem);
@@ -416,7 +362,7 @@ menu.createPresentationNodes = function(title, targetUrl, icon_url, length) {
         var titleTextNode = document.createTextNode(title);
 
         linkElem.appendChild(titleTextNode);
-        var titleText = menu.titleTemplate.split(menu.NUM_TEMPLATE).join(length);
+        var titleText = this.titleTemplate.split(this.NUM_TEMPLATE).join(length);
         linkElem.setAttribute('title', title);
         linkElem.setAttribute('href', targetUrl);
     }
@@ -425,7 +371,7 @@ menu.createPresentationNodes = function(title, targetUrl, icon_url, length) {
         var titleTextNode = document.createTextNode(title);
 
         linkElem.appendChild(titleTextNode);
-        var titleText = menu.titleTemplate.split(menu.NUM_TEMPLATE).join(length);
+        var titleText = this.titleTemplate.split(this.NUM_TEMPLATE).join(length);
         linkElem.setAttribute('title', title);
     }
     iconElem.appendChild(linkElem);
@@ -433,19 +379,19 @@ menu.createPresentationNodes = function(title, targetUrl, icon_url, length) {
     return expandElem;
 }
 
-menu.createLoadingNode = function() {
+menu.MenuTree.prototype.createLoadingNode = function() {
     var loadingElem = document.createElement('loading');
-    var titleTextNode = document.createTextNode(menu.loadingMsg);
+    var titleTextNode = document.createTextNode(this.loadingMsg);
 
     loadingElem.appendChild(titleTextNode);
 
     return loadingElem;
 }
 
-menu.createNavigationTreeNode = function(source, basePath, deep) {
+menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, deep) {
     var newelem = document.createElement(source.tagName);
 
-    var navTreeNode = new menu.navigationTreeNode(newelem);
+    var navTreeNode = new menu.navigationTreeNode(this, newelem);
     var elemPath;
     var elemTitle;
     var elemUrl;
@@ -456,9 +402,9 @@ menu.createNavigationTreeNode = function(source, basePath, deep) {
         // menu.baseurl = source.getAttribute('baseURL');
         // elemPath = source.getAttribute('baseURL');
         newelem.style.marginLeft = '0px';
-        menu.navigationTree = navTreeNode;
+        this.navigationTree = navTreeNode;
         navTreeNode.setIsRoot(1);
-        menu.docNavTree.appendChild(newelem);
+        this.docNavTree.appendChild(newelem);
     } else {
         elemTitle = source.getAttribute('title');
         elemPath = basePath + source.getAttribute('name') + '/';
@@ -473,7 +419,7 @@ menu.createNavigationTreeNode = function(source, basePath, deep) {
 
     var targetUrl = elemUrl;
     if (!navTreeNode.isRoot) {
-        var expandElem = menu.createPresentationNodes(elemTitle, targetUrl,
+        var expandElem = this.createPresentationNodes(elemTitle, targetUrl,
                 icon_url, length);
         newelem.appendChild(expandElem);
         // If no child element, we can disable the tree expansion
@@ -485,10 +431,10 @@ menu.createNavigationTreeNode = function(source, basePath, deep) {
         navTreeNode.setSelected();
 
     if (deep) {
-        var children = menu.getCollectionChildNodes(source);
+        var children = this.getCollectionChildNodes(source);
         var numchildren = children.length;
         for ( var i = 0; i < numchildren; i++) {
-            var navTreeNodeChild = menu.createNavigationTreeNode(children[i],
+            var navTreeNodeChild = this.createNavigationTreeNode(children[i],
                     basePath, deep);
             navTreeNode.appendChild(navTreeNodeChild);
         }

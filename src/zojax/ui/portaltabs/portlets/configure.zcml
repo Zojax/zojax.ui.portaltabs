@@ -11,6 +11,7 @@
   <zojax:resourceinclude
      name="zojax.ui.portaltabs.menu1"
      library="zojax.ui.portaltabs"
+     require="jquery"
      type="javascript"
      path="zojax-ui-portaltabs-menu1.js" compression="yes" />
 

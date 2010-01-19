@@ -3,11 +3,12 @@
   <h2 class="z-portlet-header" i18n:translate="" tal:content="python:context.label is None and context.title or context.label">Title</h2>
 
   <div class="z-portlet-body">
-    <div xmlns="http://www.zope.org/zope3xmltree"
-         id="menutreecontents"
+    <div id="menutreecontents"
          class="z-portlet-item"
-         onclick="menu.treeclicked(event);"
-         i18n:translate="">Loading...</div>
+         i18n:translate="">
+         <div xmlns="http://www.zope.org/zope3xmltree"
+              tal:attributes="id context/id">Loading...</div>
+    </div>
   </div>
 
 </div>

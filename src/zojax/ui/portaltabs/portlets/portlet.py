@@ -29,8 +29,10 @@ from zojax.resourcepackage.library import includeInplaceSource
 from zojax.cache.view import cache
 from zojax.portlet.cache import PortletModificationTag, PortletId
 from zojax.ui.portaltabs.cache import PortalTabsTag
+from zojax.portlet.browser.portlet import publicAbsoluteURL
 
-from zojax.ui.portaltabs.interfaces import IPortalTabsConfiglet, IPortalTab
+from zojax.ui.portaltabs.interfaces import IPortalTabsConfiglet, IPortalTab, \
+                                            IObjectPortalTab
 
 
 def ViewAndContext(object, instance, *args, **kw):
@@ -66,13 +68,18 @@ class MenuPortlet(object):
                     tab = tab.__bind__(context, self.request)
         if tab:
             fromTab = tab.id
+            if IObjectPortalTab.providedBy(tab):
+                self.context = tab.content
         else:
             fromTab = ''
         site_url = absoluteURL(getSite(), self.request)
+        url = publicAbsoluteURL(self, self.request)
+        self.id = url.replace(site_url, '').replace('/', '-').replace('.', '-')[1:]
         includeInplaceSource(menuinit%{'appUrl': site_url,
                                        'currUrl': self.request.URL[-1],
                                        'fromTab': fromTab,
-                                       'hideSiblings': self.hideSiblings and 1 or 0},
+                                       'hideSiblings': self.hideSiblings and 1 or 0,
+                                       'id': self.id},
                              required=('zojax.ui.portaltabs',))
 
     def isAvailable(self):
@@ -94,14 +101,9 @@ class MenuPortlet(object):
 
 menuinit = """
 <script type="text/javascript">
-    menu.onload = function (){
-    menu.loadtree('%(appUrl)s/', '%(currUrl)s/', '%(fromTab)s', %(hideSiblings)s);
-  };
-
-  if (window.addEventListener)
-      window.addEventListener("load", menu.onload, false);
-  if (window.attachEvent)
-      window.attachEvent("onload", menu.onload)
+    $(document).ready( function() {
+    new menu.MenuTree('%(id)s', '%(appUrl)s/', '%(currUrl)s/', '%(fromTab)s', %(hideSiblings)s);
+  });
 </script>
 """
 
