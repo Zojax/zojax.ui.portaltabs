@@ -109,9 +109,10 @@ We should not see portaltabs extension without extension support for object:
 
     >>> actor.open('http://localhost/content/context.html')
     >>> actor.getLink('Presentation').click()
+    >>> actor.getControl('Title')
     Traceback (most recent call last):
     ...
-    LinkNotFoundError
+    LookupError: label 'Title'
 
 So we should enable extension support:
     >>> interface.alsoProvides(root['content'], IExtensible)
@@ -160,25 +161,24 @@ We see registered tab in configlet
 
 Menu Tree Portlet
 
-    >>> actor.open("http://localhost/testportlet.html")
+    >>> actor.open('http://localhost/content/context.html/presentation/pm-columns.left/?form.widgets.portletIds:list=portlet.portaltabs&form.buttons.save=Save&form.widgets.status=1')
+    >>> actor.open("http://localhost/content/testportlet.html")
     >>> print actor.contents
     <html>
     ...
     <script type="text/javascript" src="http://localhost/.../zojax.ui.portaltabs.js"></script>
     <script type="text/javascript">
-        menu.onload = function (){
-        menu.loadtree('http://localhost/', 'http://localhost/', '', 0);
-      };
-      if (window.addEventListener)
-          window.addEventListener("load", menu.onload, false);
-      if (window.attachEvent)
-          window.attachEvent("onload", menu.onload)
+        $(document).ready( function() {
+        new menu.MenuTree('content-portlets-columns-left-portlet-portaltabs', 'http://localhost/', 'http://localhost/content/', '', 0);
+      });
     </script>
     ...
     ...<div class="z-portlet portlet-menutree">
       <h2 class="z-portlet-header">Menu</h2>
       <div class="z-portlet-body">
-        <div xmlns="http://www.zope.org/zope3xmltree" id="menutreecontents" class="z-portlet-item" onclick="menu.treeclicked(event);">Loading...</div>
+        <div id="menutreecontents" class="z-portlet-item">
+             <div xmlns="http://www.zope.org/zope3xmltree" id="content-portlets-columns-left-portlet-portaltabs">Loading...</div>
+        </div>
       </div>
     </div>...
     ...

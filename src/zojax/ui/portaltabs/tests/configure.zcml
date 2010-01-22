@@ -30,5 +30,11 @@
      for="*"
      template="testportletstatic.pt"
      permission="zope.Public" />
+     
+ <zojax:portletManager
+     name="columns.left"
+     class="zojax.portlet.manager.PortletManagerWithStatus"
+     schema="zojax.portlet.interfaces.IPortletManagerWithStatus"
+     title="Left column portlets" />
 
 </configure>

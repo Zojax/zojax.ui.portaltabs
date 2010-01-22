@@ -1,1 +1,1 @@
-<div tal:content="structure portlet:portlet.portaltabs"></div>
+<div tal:content="structure provider:columns.left" />
