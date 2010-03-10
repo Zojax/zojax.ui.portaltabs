@@ -25,7 +25,7 @@ from zope.traversing.api import getPath
 from zope.app.component.hooks import getSite
 
 from zojax.resourcepackage.library import includeInplaceSource
-
+from zojax.filefield.field import FileFieldProperty
 from zojax.cache.view import cache
 from zojax.portlet.cache import PortletModificationTag, PortletId
 from zojax.ui.portaltabs.cache import PortalTabsTag
@@ -33,6 +33,8 @@ from zojax.portlet.browser.portlet import publicAbsoluteURL
 
 from zojax.ui.portaltabs.interfaces import IPortalTabsConfiglet, IPortalTab, \
                                             IObjectPortalTab
+                                            
+from interfaces import IStaticMenuPortlet
 
 
 def ViewAndContext(object, instance, *args, **kw):
@@ -46,6 +48,8 @@ def ViewAndContext(object, instance, *args, **kw):
 
 
 class MenuPortlet(object):
+    
+    headerImage = FileFieldProperty(IStaticMenuPortlet['headerImage'])
 
     def update(self):
         configlet = getUtility(IPortalTabsConfiglet)
@@ -109,6 +113,8 @@ menuinit = """
 
 
 class StaticMenuPortlet(object):
+    
+    headerImage = FileFieldProperty(IStaticMenuPortlet['headerImage'])
 
     def update(self):
         configlet = getUtility(IPortalTabsConfiglet)

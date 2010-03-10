@@ -17,6 +17,8 @@ $Id$
 """
 from zope import interface, schema
 
+from zojax.filefield.field import ImageField
+
 from zojax.ui.portaltabs.interfaces import _
 
 
@@ -24,6 +26,11 @@ class IMenuPortletBase(interface.Interface):
 
     label = schema.TextLine(title=_(u'Label'),
                             required=False)
+    
+    headerImage = ImageField(title=_(u'Header mage'),
+                             description=_(u'Portlet header image'),
+                             required=False
+                             )
 
     fromTab = schema.Choice(title = _(u'From Tab'),
                             vocabulary='portal.tabs.portlet',
@@ -38,7 +45,7 @@ class IMenuPortlet(IMenuPortletBase):
 
 
 class IStaticMenuPortlet(IMenuPortletBase):
-
+    
     level = schema.Int(title=_(u'Recursion level'),
                        description=_(u'0 - unrestricted'),
                        default=0)

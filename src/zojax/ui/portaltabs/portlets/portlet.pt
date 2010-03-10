@@ -1,7 +1,10 @@
 <div class="z-portlet portlet-menutree" i18n:domain="zojax.ui.portaltabs">
 
   <h2 class="z-portlet-header" i18n:translate="" tal:content="python:context.label is None and context.title or context.label">Title</h2>
-
+  
+  <img class="z-portlet-header-image" tal:condition="context/headerImage" 
+       tal:attributes="src string:${context/@@public_absolute_url}/++attribute++headerImage" /> 
+  
   <div class="z-portlet-body">
     <div id="menutreecontents"
          class="z-portlet-item"
