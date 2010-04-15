@@ -3,11 +3,12 @@ menu = {
 };
 
 // class menu.navigationTreeNode
-menu.navigationTreeNode = function(menu, domNode) {
+menu.navigationTreeNode = function(menu, domNode, divNode) {
     this.childNodes = new Array();
     this.isEmpty = 1;
     this.isCollapsed = 1;
     this.domNode = domNode;
+    this.divNode = divNode;
     this.loadingNode = null;
     this.path = '';
     this.parentNode = null;
@@ -17,7 +18,7 @@ menu.navigationTreeNode = function(menu, domNode) {
 
 menu.navigationTreeNode.prototype.appendChild = function(node) {
     this.childNodes.push(node);
-    this.domNode.appendChild(node.domNode);
+    this.divNode.appendChild(node.domNode);
     node.parentNode = this;
 }
 
@@ -53,7 +54,8 @@ menu.navigationTreeNode.prototype.expand = function() {
 menu.navigationTreeNode.prototype.changeExpandIcon = function(icon) {
     var expand = this.domNode.getElementsByTagName('expand')[0];
     expand.style.backgroundImage = 'url("' + this.menu.baseurl + '@@/' + icon + '.gif")';
-    expand.className= icon
+    expand.className= icon;
+    $(expand).children('div.expand').attr('class', icon).addClass('expand')
 }
 
 menu.navigationTreeNode.prototype.getNodeByPath = function(path) {
@@ -94,7 +96,7 @@ menu.navigationTreeNode.prototype.startLoadingChildren = function() {
         if (loadingNode)
             return;
         loadingNode = menu.createLoadingNode();
-        domNode.appendChild(loadingNode);
+        divNode.appendChild(loadingNode);
         // var url = menu.baseurl + path + menu.XML_CHILDREN_VIEW;
         var url = menu.XML_PUBLISHER_VIEW + '/' + path + menu.XML_CHILDREN_VIEW;
         menu.loadtreexml(url, this);
@@ -105,14 +107,14 @@ menu.navigationTreeNode.prototype.finishLoadingChildren = function() {
     with (this) {
         isEmpty = 0;
         refreshExpansion();
-        domNode.removeChild(loadingNode);
+        divNode.removeChild(loadingNode);
         loadingNode = null;
     }
 }
 
 menu.navigationTreeNode.prototype.abortLoadingChildren = function() {
     with (this) {
-        domNode.removeChild(loadingNode);
+        divNode.removeChild(loadingNode);
         loadingNode = null;
     }
 }
@@ -274,7 +276,7 @@ menu.MenuTree.prototype.treeclicked = function(e) {
     // if node clicked is expand elem, toggle expansion
     if (this.isExpand(elem) && !elem.getAttribute('disabled')) {
         // get collection node
-        elem = elem.parentNode;
+        elem = elem.parentNode.parentNode;
         var navTreeNode = this.navigationTree.getNodeByPath(elem.getAttribute('path'));
         navTreeNode.toggleExpansion();
     }
@@ -344,13 +346,16 @@ menu.MenuTree.prototype.createPresentationNodes = function(title, targetUrl, ico
 
     // create elem for plus/minus icon
     var expandElem = document.createElement('expand');
+    var divElem = document.createElement('div');
+    divElem.className = 'expand';
+    expandElem.appendChild(divElem);
     var instance = this;
     $(expandElem).click(function (e) {
         instance.treeclicked(e)
     });
     // create elem for item icon
     var iconElem = document.createElement('icon');
-    expandElem.appendChild(iconElem);
+    divElem.appendChild(iconElem);
     // Mozilla tries to infer an URL if url is empty and reloads containing page
     if (icon_url != '') {
         iconElem.style.backgroundImage = 'url("' + icon_url + '")';
@@ -390,8 +395,10 @@ menu.MenuTree.prototype.createLoadingNode = function() {
 
 menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, deep) {
     var newelem = document.createElement(source.tagName);
-
-    var navTreeNode = new menu.navigationTreeNode(this, newelem);
+    var newdivelem = document.createElement('div');
+    newelem.appendChild(newdivelem);
+    newdivelem.className = 'collection';
+    var navTreeNode = new menu.navigationTreeNode(this, newelem, newdivelem);
     var elemPath;
     var elemTitle;
     var elemUrl;
@@ -421,7 +428,7 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
     if (!navTreeNode.isRoot) {
         var expandElem = this.createPresentationNodes(elemTitle, targetUrl,
                 icon_url, length);
-        newelem.appendChild(expandElem);
+        newdivelem.appendChild(expandElem);
         // If no child element, we can disable the tree expansion
         if (length == '0' || !length)
             expandElem.setAttribute('disabled', '1');
