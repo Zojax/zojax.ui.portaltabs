@@ -53,7 +53,7 @@ menu.navigationTreeNode.prototype.expand = function() {
 menu.navigationTreeNode.prototype.changeExpandIcon = function(icon) {
     var expand = this.domNode.getElementsByTagName(this.menu.EXPAND)[0];
     //expand.style.backgroundImage = 'url("' + this.menu.baseurl + '@@/' + icon + '.gif")';
-    expand.className= icon
+    expand.className= 'expand ' + icon
 }
 
 menu.navigationTreeNode.prototype.getNodeByPath = function(path) {
@@ -155,7 +155,7 @@ menu.MenuTree = function(id, rooturl, thismenubaseurl, fromtab, hidesliblings) {
     this.TEXT_NODE = 3;
     this.COLLECTION = 'COLLECTION';
     this.ICON = 'DIV';
-    this.EXPAND = 'LI';
+    this.EXPAND = 'DIV';
     this.XML_PUBLISHER_VIEW = 'zojax.ui.portaltabs'
     this.XML_CHILDREN_VIEW = '@@menuChildren.xml';
     this.SINGLE_BRANCH_TREE_VIEW = '@@menuSingleBranchTree.xml';
@@ -344,6 +344,7 @@ menu.MenuTree.prototype.createPresentationNodes = function(title, targetUrl, ico
 
     // create elem for plus/minus icon
     var expandElem = document.createElement(this.EXPAND);
+    expandElem.className = 'expand'
     var instance = this;
     $(expandElem).click(function (e) {
         instance.treeclicked(e)
@@ -389,7 +390,8 @@ menu.MenuTree.prototype.createLoadingNode = function() {
 }
 
 menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, deep) {
-    var newelem = document.createElement('ul');
+    var newelem = document.createElement('div');
+    newelem.className = 'collection'
     var navTreeNode = new menu.navigationTreeNode(this, newelem);
     var elemPath;
     var elemTitle;
