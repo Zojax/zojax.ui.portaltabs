@@ -32,11 +32,11 @@ menu.navigationTreeNode.prototype.setIsRoot = function(isRoot) {
 }
 
 menu.navigationTreeNode.prototype.setSelected = function() {
-    var items = this.menu.navigationTree.domNode.getElementsByTagName(this.menu.ICON)
+    var items = this.menu.navigationTree.domNode.getElementsByClassName(this.menu.ICON)
     for ( var i = 0; i < items.length; i++) {
-        items[i].className = '';
+        items[i].className = 'icon';
     }
-    this.domNode.getElementsByTagName(this.menu.ICON)[0].className = 'selected';
+    this.domNode.getElementsByClassName(this.menu.ICON)[0].className = 'icon selected';
 }
 
 menu.navigationTreeNode.prototype.collapse = function() {
