@@ -32,7 +32,7 @@ menu.navigationTreeNode.prototype.setIsRoot = function(isRoot) {
 }
 
 menu.navigationTreeNode.prototype.setSelected = function() {
-    var items = this.menu.navigationTree.domNode.getElementsByClassName('icon')
+    var items = this.menu.navigationTree.domNode.getElementsByClassName('icon');
     for ( var i = 0; i < items.length; i++) {
         items[i].className = 'icon';
     }
