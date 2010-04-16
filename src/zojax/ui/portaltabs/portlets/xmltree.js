@@ -240,7 +240,7 @@ menu.MenuTree.prototype.isIcon = function(elem) {
 }
 
 menu.MenuTree.prototype.isExpand = function(elem) {
-    return this.checkTagName(elem, this.EXPAND);
+    return this.checkTagName(elem, this.EXPAND) && elem.className.search('expand') != -1;
 }
 
 menu.MenuTree.prototype.checkTagName = function(elem, tagName) {
