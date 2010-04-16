@@ -32,11 +32,11 @@ menu.navigationTreeNode.prototype.setIsRoot = function(isRoot) {
 }
 
 menu.navigationTreeNode.prototype.setSelected = function() {
-    var items = this.menu.navigationTree.domNode.getElementsByClassName(this.menu.ICON)
+    var items = this.menu.navigationTree.domNode.getElementsByClassName('icon')
     for ( var i = 0; i < items.length; i++) {
         items[i].className = 'icon';
     }
-    this.domNode.getElementsByClassName(this.menu.ICON)[0].className = 'icon selected';
+    this.domNode.getElementsByClassName('icon')[0].className = 'icon selected';
 }
 
 menu.navigationTreeNode.prototype.collapse = function() {
@@ -418,7 +418,6 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
     var length = source.getAttribute('length');
 
     var icon_url = source.getAttribute('icon_url');
-
     var targetUrl = elemUrl;
     if (!navTreeNode.isRoot) {
         var expandElem = this.createPresentationNodes(elemTitle, targetUrl,
