@@ -14,7 +14,8 @@
   height: 18px;
 }
 
-#menutreecontents expand {
+#menutreecontents expand,
+#menutreecontents .expand {
   background-repeat: no-repeat;
   background-position: center left;
   padding-left: 14px;
@@ -22,12 +23,14 @@
   cursor: pointer;
 }
 
-#menutreecontents expand:hover {
+#menutreecontents expand:hover,
+#menutreecontents .expand:hover {
   background-color: globalBackgroundColor;
 }
 
 
-#menutreecontents icon {
+#menutreecontents icon,
+#menutreecontents .icon {
   background-repeat: no-repeat;
   background-position: center left;
   padding-left: 20px;
@@ -35,11 +38,13 @@
   cursor: auto;
 }
 
+#menutreecontents icon.selected,
 #menutreecontents icon.selected {
   background-color: globalBackgroundColor;
 }
 
-#menutreecontents collection {
+#menutreecontents collection,
+#menutreecontents .collection {
   display: block;
   margin-left: 10px;
   height: auto;
