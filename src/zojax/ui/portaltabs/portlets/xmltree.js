@@ -32,11 +32,8 @@ menu.navigationTreeNode.prototype.setIsRoot = function(isRoot) {
 }
 
 menu.navigationTreeNode.prototype.setSelected = function() {
-    var items = this.menu.navigationTree.domNode.getElementsByClassName('icon');
-    for ( var i = 0; i < items.length; i++) {
-        items[i].className = 'icon';
-    }
-    this.domNode.getElementsByClassName('icon')[0].className = 'icon menutree-selected';
+    $(this.menu.navigationTree.domNode).find('.icon').removeClass('menutree-selected');
+    $(this.domNode).find('.icon').addClass('menutree-selected');
 }
 
 menu.navigationTreeNode.prototype.collapse = function() {
