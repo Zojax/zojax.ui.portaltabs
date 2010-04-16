@@ -47,6 +47,9 @@
   cursor: pointer;
   text-decoration: none;
 }
+#menutreecontents .menutree-selected {
+  font-weight: bold;
+}
 
 #menutreecontents loading {
   display: block;
@@ -61,6 +64,14 @@
   padding-left: 14px;
   display: inline;
   cursor: pointer;
+}
+#menutreecontents expand.plus,
+#menutreecontents .expand.plus {
+  background-image: url(portaltabs/images/plus.gif);
+}
+#menutreecontents expand.minus,
+#menutreecontents .expand.minus {
+  background-image: url(portaltabs/images/minus.gif);
 }
 
 #menutreecontents expand:hover,
