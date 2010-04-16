@@ -1,0 +1,100 @@
+/* zrt-cssregistry: */
+
+@media all {
+
+  #z-portal-tabs {
+    text-align: right;
+    margin: 0;
+    padding-right: 1em;
+    background-color: transparent;
+    font-size: 110%;
+    line-height: normal;
+  }
+
+  #z-portal-tabs ul {
+    list-style: none;
+    line-height: normal;
+  }
+
+  #z-portal-tabs li {
+    display: inline;
+    margin-right: 0.5em;
+  }
+
+  #z-portal-tabs li a {
+    background-color: transparent;
+    border: borderWidth borderStyle globalBorderColor;
+    border-bottom: none;
+    padding: 0em 1em 0em 1em;
+    text-decoration: none;
+    text-transform: textTransform;
+    z-index: 1;
+  }
+
+  #z-portal-tabs .selected a {
+    background-color: globalBackgroundColor;
+    border-bottom: borderWidth borderStyle globalBackgroundColor;
+  }
+
+  #z-portal-tabs li a:hover {
+    background-color: globalBackgroundColor;
+    border-bottom: borderWidth borderStyle globalBackgroundColor;
+  }
+
+/* Styles for xmltree */
+
+#menutreecontents a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#menutreecontents loading {
+  display: block;
+  padding-left: 31px;
+  height: 18px;
+}
+
+#menutreecontents expand,
+#menutreecontents .expand {
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding-left: 14px;
+  display: inline;
+  cursor: pointer;
+}
+
+#menutreecontents expand:hover,
+#menutreecontents .expand:hover {
+  background-color: globalBackgroundColor;
+}
+
+
+#menutreecontents icon,
+#menutreecontents .icon {
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding-left: 20px;
+  display: inline;
+  cursor: auto;
+}
+
+#menutreecontents icon.selected,
+#menutreecontents icon.selected {
+  background-color: globalBackgroundColor;
+}
+
+#menutreecontents collection,
+#menutreecontents .collection {
+  display: block;
+  margin-left: 10px;
+  height: auto;
+}
+
+
+}
+
+@media print {
+  #z-portal-tabs {
+    display: none;
+  }
+}

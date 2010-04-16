@@ -37,13 +37,6 @@
      type="portlet.view"
      class=".portlet.StaticMenuPortletView" />
 
-  <!-- styles -->
-  <zojax:resourceinclude
-     name="zojax-portlets-portaltabs.css"
-     library="zojax"
-     type="stylesheet"
-     file="styles.css" filetype="zrt" />
-
   <include package=".xmltree" />
 
   <utility

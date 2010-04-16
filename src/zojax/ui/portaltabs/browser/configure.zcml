@@ -58,17 +58,23 @@
 
   <zojax:resource
      name="minus.gif"
-     file="minus.gif" />
+     file="resources/images/minus.gif" />
 
   <zojax:resource
      name="plus.gif"
-     file="plus.gif" />
+     file="resources/images/plus.gif" />
+     
+  <!-- css resources -->
+  <zojax:resourcedirectory
+     name="portaltabs"
+     directory="resources"
+     mapping=".css:zrt" />
 
   <!-- styles -->
   <zojax:resourceinclude
      name="zojax-ui-portaltabs.css"
      library="zojax"
      type="stylesheet"
-     file="styles.css" filetype="zrt" />
+     path="portaltabs/styles.css" filetype="zrt" />
 
 </configure>
