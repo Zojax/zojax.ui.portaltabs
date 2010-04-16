@@ -351,6 +351,7 @@ menu.MenuTree.prototype.createPresentationNodes = function(title, targetUrl, ico
     });
     // create elem for item icon
     var iconElem = document.createElement(this.ICON);
+    iconElem.className = 'icon';
     expandElem.appendChild(iconElem);
     // Mozilla tries to infer an URL if url is empty and reloads containing page
     if (icon_url != '') {
