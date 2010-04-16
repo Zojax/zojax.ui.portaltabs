@@ -36,7 +36,7 @@ menu.navigationTreeNode.prototype.setSelected = function() {
     for ( var i = 0; i < items.length; i++) {
         items[i].className = 'icon';
     }
-    this.domNode.getElementsByClassName('icon')[0].className = 'icon selected';
+    this.domNode.getElementsByClassName('icon')[0].className = 'icon menutree-selected';
 }
 
 menu.navigationTreeNode.prototype.collapse = function() {
