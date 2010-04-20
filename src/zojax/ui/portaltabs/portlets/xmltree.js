@@ -269,7 +269,7 @@ menu.MenuTree.prototype.treeclicked = function(e) {
         return
     }
     // if node clicked is expand elem, toggle expansion
-    if (this.isExpand(elem) && !elem.getAttribute('disabled')) {
+    if (this.isExpand(elem) && !elem.getAttribute('empty')) {
         // get collection node
         elem = elem.parentNode;
         var navTreeNode = this.navigationTree.getNodeByPath(elem.getAttribute('path'));
@@ -422,7 +422,7 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
         newelem.appendChild(expandElem);
         // If no child element, we can disable the tree expansion
         if (length == '0' || !length)
-            expandElem.setAttribute('disabled', '1');
+            expandElem.setAttribute('empty', '1');
     }
     // If this is the selected node, we want to highlight it with CSS
     if (source.getAttribute('selected')=='1')
