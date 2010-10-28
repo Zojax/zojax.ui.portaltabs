@@ -39,7 +39,7 @@ menu.navigationTreeNode.prototype.setSubSelected = function() {
 }
 
 menu.navigationTreeNode.prototype.setSelected = function() {
-    $(this.menu.navigationTree.domNode).find('.icon').removeClass('menutree-selected');
+    //$(this.menu.navigationTree.domNode).find('.icon').removeClass('menutree-selected');
     $(this.domNode).find('.icon:first').addClass('menutree-selected');
     var parent = this.parentNode;
     while (parent) {
