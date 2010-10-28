@@ -31,9 +31,18 @@ menu.navigationTreeNode.prototype.setIsRoot = function(isRoot) {
     this.domNode.setAttribute("isRoot", isRoot);
 }
 
+menu.navigationTreeNode.prototype.setSubSelected = function() {
+    $(this.domNode).find('.icon').addClass('have-selected-subobject');
+}
+
 menu.navigationTreeNode.prototype.setSelected = function() {
     $(this.menu.navigationTree.domNode).find('.icon').removeClass('menutree-selected');
     $(this.domNode).find('.icon').addClass('menutree-selected');
+    parent = this.parentNode;
+    while (parent) {
+        parent.setSubSelected();
+        parent = parent.parentNode
+    }
 }
 
 menu.navigationTreeNode.prototype.collapse = function() {
