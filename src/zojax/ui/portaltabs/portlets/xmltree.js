@@ -13,13 +13,14 @@ menu.navigationTreeNode = function(menu, domNode) {
     this.parentNode = null;
     this.isRoot = 0;
     this.menu = menu
+    this.isSelected = false;
 }
 
 menu.navigationTreeNode.prototype.appendChild = function(node) {
     this.childNodes.push(node);
     this.domNode.appendChild(node.domNode);
     node.parentNode = this;
-    if (node.selected)
+    if (node.isSelected)
         node.setSelected()
 }
 
@@ -436,7 +437,7 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
             expandElem.setAttribute('empty', '1');
     }
     
-    navTreeNode.selected = source.getAttribute('selected')=='1';
+    navTreeNode.isSelected = source.getAttribute('selected')=='1';
 
     if (deep) {
         var children = this.getCollectionChildNodes(source);
@@ -463,7 +464,7 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
     }
 
     // If this is the selected node, we want to highlight it with CSS
-    if (navTreeNode.selected)
+    if (navTreeNode.isSelected)
         navTreeNode.setSelected();
 
     return navTreeNode;
