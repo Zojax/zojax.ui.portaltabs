@@ -438,7 +438,11 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
     }
     
     navTreeNode.isSelected = source.getAttribute('selected')=='1';
-
+    
+    // If this is the selected node, we want to highlight it with CSS
+    if (navTreeNode.isSelected)
+        navTreeNode.setSelected();
+    
     if (deep) {
         var children = this.getCollectionChildNodes(source);
         var numchildren = children.length;
@@ -462,10 +466,6 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
         if (length != '0')
             navTreeNode.collapse();
     }
-
-    // If this is the selected node, we want to highlight it with CSS
-    if (navTreeNode.isSelected)
-        navTreeNode.setSelected();
 
     return navTreeNode;
 }
