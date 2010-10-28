@@ -19,6 +19,8 @@ menu.navigationTreeNode.prototype.appendChild = function(node) {
     this.childNodes.push(node);
     this.domNode.appendChild(node.domNode);
     node.parentNode = this;
+    if (node.selected)
+        node.setSelected()
 }
 
 menu.navigationTreeNode.prototype.setPath = function(path) {
@@ -32,12 +34,12 @@ menu.navigationTreeNode.prototype.setIsRoot = function(isRoot) {
 }
 
 menu.navigationTreeNode.prototype.setSubSelected = function() {
-    $(this.domNode).find('.icon').addClass('have-selected-subobject');
+    $(this.domNode).find('.icon:first').addClass('have-selected-subobject');
 }
 
 menu.navigationTreeNode.prototype.setSelected = function() {
     $(this.menu.navigationTree.domNode).find('.icon').removeClass('menutree-selected');
-    $(this.domNode).find('.icon').addClass('menutree-selected');
+    $(this.domNode).find('.icon:first').addClass('menutree-selected');
     var parent = this.parentNode;
     while (parent) {
         parent.setSubSelected();
@@ -434,7 +436,7 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
             expandElem.setAttribute('empty', '1');
     }
     
-    var selected = source.getAttribute('selected')=='1';
+    navTreeNode.selected = source.getAttribute('selected')=='1';
 
     if (deep) {
         var children = this.getCollectionChildNodes(source);
@@ -461,7 +463,7 @@ menu.MenuTree.prototype.createNavigationTreeNode = function(source, basePath, de
     }
 
     // If this is the selected node, we want to highlight it with CSS
-    if (selected)
+    if (navTreeNode.selected)
         navTreeNode.setSelected();
 
     return navTreeNode;
