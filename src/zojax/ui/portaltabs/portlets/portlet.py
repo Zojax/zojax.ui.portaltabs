@@ -58,7 +58,7 @@ class MenuPortlet(object):
         except AttributeError:
             context = self.context
         tab = None
-        context_url = absoluteURL(context_url, self.request)
+        context_url = absoluteURL(context, self.request)
         if self.fromTab == 'context':
             tabs = []
             id = getUtility(IIntIds).queryId(removeSecurityProxy(context))
