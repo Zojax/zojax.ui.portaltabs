@@ -58,6 +58,7 @@ class MenuPortlet(object):
         except AttributeError:
             context = self.context
         tab = None
+        context_url = absoluteURL(context_url, self.request)
         if self.fromTab == 'context':
             tabs = []
             id = getUtility(IIntIds).queryId(removeSecurityProxy(context))
@@ -79,8 +80,9 @@ class MenuPortlet(object):
         site_url = absoluteURL(getSite(), self.request)
         url = publicAbsoluteURL(self, self.request)
         self.id = url.replace(site_url, '').replace('/', '-').replace('.', '-')[1:]
+        context_url = context_url in self.request.URL[-1] and self.request.URL[-1] or context_url
         includeInplaceSource(menuinit%{'appUrl': site_url,
-                                       'currUrl': self.request.URL[-1],
+                                       'currUrl': context_url,
                                        'fromTab': fromTab,
                                        'hideSiblings': self.hideSiblings and 1 or 0,
                                        'id': self.id},
