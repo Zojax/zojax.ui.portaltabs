@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zojax.richtext.field import RichTextProperty
 """
 
 $Id$
@@ -49,6 +50,21 @@ class PortalTabsExtension(object):
 
             configlet = getUtility(IPortalTabsConfiglet)
             configlet.registered[oid].title = value
+            
+    @getproperty
+    def tabdescription(self):
+        return self.data.get(
+            'tabdescription', '')
+
+    @setproperty
+    def tabdescription(self, value):
+        self.data['tabdescription'] = value
+
+        if self.enabled:
+            oid = getUtility(IIntIds).getId(self.context)
+
+            configlet = getUtility(IPortalTabsConfiglet)
+            configlet.registered[oid].description = value
 
     @getproperty
     def enabled(self):
@@ -71,7 +87,7 @@ class PortalTabsExtension(object):
         configlet = getUtility(IPortalTabsConfiglet)
 
         if value:
-            configlet.registerTab(ObjectPortalTab(oid, self.tabtitle))
+            configlet.registerTab(ObjectPortalTab(oid, self.tabtitle, self.tabdescription))
         else:
             configlet.unregisterTab(oid)
 
@@ -113,10 +129,12 @@ class ObjectPortalTab(Persistent, PortalTab):
     interface.implements(IObjectPortalTab)
 
     submenu = None
+    description = RichTextProperty(IObjectPortalTab['description'])
 
-    def __init__(self, oid, title):
+    def __init__(self, oid, title, description=None):
         self.id = oid
         self.title = title
+        self.description = description
 
     @property
     def configlet_title(self):

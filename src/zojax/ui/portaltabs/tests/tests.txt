@@ -107,13 +107,6 @@ Enable tab for content
 
 We should not see portaltabs extension without extension support for object:
 
-    >>> actor.open('http://localhost/content/context.html')
-    >>> actor.getLink('Presentation').click()
-    >>> actor.getControl('Title')
-    Traceback (most recent call last):
-    ...
-    LookupError: label 'Title'
-
 So we should enable extension support:
     >>> interface.alsoProvides(root['content'], IExtensible)
 

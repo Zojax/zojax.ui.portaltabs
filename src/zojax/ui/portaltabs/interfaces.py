@@ -19,6 +19,8 @@ from zope import interface, schema
 from z3c.schema.baseurl import BaseURL
 from zope.i18nmessageid import MessageFactory
 
+from zojax.richtext.field import RichText
+
 _ = MessageFactory('zojax.ui.portaltabs')
 
 
@@ -33,6 +35,8 @@ class IPortalTab(interface.Interface):
     url = interface.Attribute('Url')
 
     title = interface.Attribute('Title')
+    
+    description = interface.Attribute('Description')
 
     submenu = interface.Attribute('Submenu')
 
@@ -81,6 +85,11 @@ class IPortalTabsExtension(interface.Interface):
         title = _(u'Title'),
         description = _(u'Select title for portal tab.'),
         required = True)
+    
+    tabdescription = RichText(
+        title = _(u'Description'),
+        description = _(u'Select description for portal tab.'),
+        required = False)
 
     enabled = schema.Bool(
         title = _(u'Enable'),
@@ -102,6 +111,11 @@ class IPersistentPortalTab(IPortalTab):
         title = _(u'Title'),
         description = _(u'Select title for portal tab.'),
         required = True)
+    
+    description = RichText(
+        title = _(u'Description'),
+        description = _(u'Select description for portal tab.'),
+        required = False)
 
     submenu = schema.List(
         title = _('Submenu portal tabs'),
