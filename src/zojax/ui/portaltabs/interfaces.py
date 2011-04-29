@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zojax.filefield.field import ImageField
 """
 
 $Id$
@@ -37,6 +38,8 @@ class IPortalTab(interface.Interface):
     title = interface.Attribute('Title')
     
     description = interface.Attribute('Description')
+    
+    image = interface.Attribute('image')
 
     submenu = interface.Attribute('Submenu')
 
@@ -90,6 +93,11 @@ class IPortalTabsExtension(interface.Interface):
         title = _(u'Description'),
         description = _(u'Select description for portal tab.'),
         required = False)
+    
+    tabimage = RichText(
+        title = _(u'Image'),
+        description = _(u'Image to appear in menu.'),
+        required = False)
 
     enabled = schema.Bool(
         title = _(u'Enable'),
@@ -115,6 +123,11 @@ class IPersistentPortalTab(IPortalTab):
     description = RichText(
         title = _(u'Description'),
         description = _(u'Select description for portal tab.'),
+        required = False)
+    
+    image = ImageField(
+        title = _(u'Image'),
+        description = _(u'Image to appear in menu.'),
         required = False)
 
     submenu = schema.List(

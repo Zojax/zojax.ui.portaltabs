@@ -20,6 +20,7 @@ from persistent import Persistent
 from zope.schema.fieldproperty import FieldProperty
 
 from zojax.richtext.field import RichTextProperty
+from zojax.filefield.field import FileFieldProperty
 
 from portaltab import PortalTab
 from interfaces import IPortalTab, ISimplePortalTab, IPortalTabsConfiglet
@@ -31,6 +32,8 @@ class PortalTab(Persistent, PortalTab):
     submenu = ()
     
     description = RichTextProperty(ISimplePortalTab['description'])
+    
+    image = FileFieldProperty(ISimplePortalTab['image'])
 
     @property
     def configlet_title(self):

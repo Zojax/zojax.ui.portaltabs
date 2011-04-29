@@ -12,6 +12,7 @@
 #
 ##############################################################################
 from zojax.richtext.field import RichTextProperty
+from zojax.filefield.field import FileFieldProperty
 """
 
 $Id$
@@ -65,6 +66,21 @@ class PortalTabsExtension(object):
 
             configlet = getUtility(IPortalTabsConfiglet)
             configlet.registered[oid].description = value
+            
+    @getproperty
+    def tabimage(self):
+        return self.data.get(
+            'tabimage', '')
+
+    @setproperty
+    def tabimage(self, value):
+        self.data['tabimage'] = value
+
+        if self.enabled:
+            oid = getUtility(IIntIds).getId(self.context)
+
+            configlet = getUtility(IPortalTabsConfiglet)
+            configlet.registered[oid].image = value
 
     @getproperty
     def enabled(self):
@@ -130,11 +146,13 @@ class ObjectPortalTab(Persistent, PortalTab):
 
     submenu = None
     description = RichTextProperty(IObjectPortalTab['description'])
+    image = FileFieldProperty(IObjectPortalTab['image'])
 
-    def __init__(self, oid, title, description=None):
+    def __init__(self, oid, title, description=None, image=None):
         self.id = oid
         self.title = title
         self.description = description
+        self.image = image
 
     @property
     def configlet_title(self):

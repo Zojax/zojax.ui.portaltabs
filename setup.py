@@ -72,7 +72,8 @@ setup(name='zojax.ui.portaltabs',
                           'zojax.content.type',
                           'zojax.content.browser',
                           'zojax.content.forms',
-                          'zojax.richtext'
+                          'zojax.richtext',
+                          'zojax.filefield'
                           ],
       extras_require = dict(test=['zope.app.testing',
                                   'zope.app.zcmlfiles',
