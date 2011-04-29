@@ -94,7 +94,7 @@ class IPortalTabsExtension(interface.Interface):
         description = _(u'Select description for portal tab.'),
         required = False)
     
-    tabimage = RichText(
+    tabimage = ImageField(
         title = _(u'Image'),
         description = _(u'Image to appear in menu.'),
         required = False)
