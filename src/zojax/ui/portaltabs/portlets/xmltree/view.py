@@ -43,3 +43,6 @@ class PortalTabsView(object):
                 return LocationProxy(tab, self, name)
 
         raise NotFound(self, name, request)
+
+    def __call__(self):
+	raise NotFound(self, name, request)
