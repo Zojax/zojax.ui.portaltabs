@@ -87,27 +87,33 @@ class XmlObjectView(BrowserView):
     def children_utility(self, container, deep=False):
         """Return an XML document that contains the children of an object."""
         result = []
+        submenu=None
+        try:
+            submenu=container.getSubmenu()
+        except AttributeError:
+            pass
+        if submenu:
+            for item in submenu:
 
-        for item in container.getSubmenu():
-
-            iconUrl = self.getIconUrl(item)
-            item_len = self.getLengthOf(item)
-            selected = item.isSelected(True)
-            if selected:
-                self.found_selected = True
-            if not deep or self.found_selected:
-                result.append(xmlEscape(
-                    u'<collection name=%s title=%s length=%s '
-                    u'icon_url=%s url=%s selected=%s />',
-                    item.id, item.title, item_len, iconUrl, item.url is not None and item.url or u'', selected and 1 or 0))
-            else:
-                result.append(xmlEscapeWithCData(
-                    u'<collection name=%s title=%s length=%s '
-                    u'icon_url=%s url=%s selected=%s>%s</collection>',
-                    item.id, item.title, item_len, iconUrl, item.url is not None and item.url or u'',
-                    selected and 1 or 0,
-                    self.children_utility(item, deep)))
-        return u' '.join(result)
+                iconUrl = self.getIconUrl(item)
+                item_len = self.getLengthOf(item)
+                selected = item.isSelected(True)
+                if selected:
+                    self.found_selected = True
+                if not deep or self.found_selected:
+                    result.append(xmlEscape(
+                        u'<collection name=%s title=%s length=%s '
+                        u'icon_url=%s url=%s selected=%s />',
+                        item.id, item.title, item_len, iconUrl, item.url is not None and item.url or u'', selected and 1 or 0))
+                else:
+                    result.append(xmlEscapeWithCData(
+                        u'<collection name=%s title=%s length=%s '
+                        u'icon_url=%s url=%s selected=%s>%s</collection>',
+                        item.id, item.title, item_len, iconUrl, item.url is not None and item.url or u'',
+                        selected and 1 or 0,
+                        self.children_utility(item, deep)))
+            return u' '.join(result)
+     
 
 
     def children(self):
