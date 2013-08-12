@@ -1,0 +1,15 @@
+<div class="z-portlet portlet-menutree-static" i18n:domain="zojax.ui.portaltabs"
+     tal:define="folders context/folders">
+
+    <div class="z-portlet-body">
+        <div class="z-portlet-item">
+            <ul>
+                <li tal:repeat="folder folders"
+                    tal:content="folder/title"></li>
+            </ul>
+          <!--<a tal:attributes="href folder/tab/url"-->
+             <!--tal:content="tab/tab/title" />-->
+
+        </div>
+    </div>
+</div>

@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zojax.catalog.interfaces import ICatalog
 from zope.traversing.browser.absoluteurl import absoluteURL
 """
 
@@ -86,7 +87,7 @@ class MenuPortlet(object):
                                        'fromTab': fromTab,
                                        'hideSiblings': self.hideSiblings and 1 or 0,
                                        'id': self.id},
-                             required=('zojax.ui.portaltabs',))
+                             required=('zojax.ui.folders',))
 
     def isAvailable(self):
         try:
@@ -165,3 +166,16 @@ class StaticMenuPortlet(object):
 class StaticMenuPortletView(object):
 
     template = ViewPageTemplateFile('staticportlet.pt')
+
+
+class FoldersMenuPortlet(object):
+
+    def update(self):
+        results = getUtility(ICatalog).searchResults(traversablePath={'any_of': [self.context]},
+                                                     type={'any_of': ('content.folder', 'documents.folder')})
+        self.folders = results
+
+
+class FoldersMenuPortletView(object):
+
+    template = ViewPageTemplateFile('foldersportlet.pt')

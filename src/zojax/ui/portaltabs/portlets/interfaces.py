@@ -49,3 +49,10 @@ class IStaticMenuPortlet(IMenuPortletBase):
     level = schema.Int(title=_(u'Recursion level'),
                        description=_(u'0 - unrestricted'),
                        default=0)
+
+
+class IFoldersMenuPortlet(IMenuPortletBase):
+
+    level = schema.Int(title=_(u'Recursion level'),
+                       description=_(u'0 - unrestricted'),
+                       default=0)
