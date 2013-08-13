@@ -109,3 +109,16 @@
     display: none;
   }
 }
+
+span.folder {
+    background: url("portaltabs/images/folder.png") no-repeat;
+    padding-left: 20px;
+    padding-top: 2px;
+}
+ul.tree-node {
+    list-style: none;
+}
+
+ul.tree-root {
+    margin: -5px 0 0 4px;
+}
