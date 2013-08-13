@@ -12,6 +12,7 @@
 #
 ##############################################################################
 from zojax.catalog.interfaces import ICatalog
+from zojax.content.documents.container import DocumentsContainer
 from zope.traversing.browser.absoluteurl import absoluteURL
 """
 
@@ -170,12 +171,17 @@ class StaticMenuPortletView(object):
 
 class FoldersMenuPortlet(object):
 
+    def getSubFolders(self, root):
+        return [folder for folder in root.values() if folder.__class__ == DocumentsContainer]
+
     def update(self):
-        results = getUtility(ICatalog).searchResults(traversablePath={'any_of': [self.context]},
-                                                     type={'any_of': ('content.folder', 'documents.folder')})
-        self.folders = results
+        root_folders = self.getSubFolders(self.context)
 
-
-class FoldersMenuPortletView(object):
-
-    template = ViewPageTemplateFile('foldersportlet.pt')
+        def result(folders):
+            for folder in folders:
+                yield {'folder': folder,
+                       'url': absoluteURL(folder, self.request),
+                       'subfolders': result(self.getSubFolders(folder)),
+                       'current': folder == self.context,
+                       'itemsCount': len(folder) - 1}
+        self.folders = result(root_folders)

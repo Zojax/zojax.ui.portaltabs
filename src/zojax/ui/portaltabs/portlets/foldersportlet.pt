@@ -1,15 +1,30 @@
-<div class="z-portlet portlet-menutree-static" i18n:domain="zojax.ui.portaltabs"
-     tal:define="folders context/folders">
-
+<div class="z-portlet" i18n:domain="zojax.ui.portaltabs" tal:define="folders context/folders">
     <div class="z-portlet-body">
         <div class="z-portlet-item">
             <ul>
-                <li tal:repeat="folder folders"
-                    tal:content="folder/title"></li>
+                <li tal:repeat="folder folders" class="tree-node" >
+                    <a tal:attributes="href folder/url; class python:folder['current'] and 'selected' or ''"
+                       tal:content="folder/folder/title"/>
+                    <span tal:condition="folder/itemsCount"
+                          tal:content="string:(${folder/itemsCount})"></span>
+                    <metal:block use-macro="view/template/macros/subfolder" />
+                </li>
             </ul>
-          <!--<a tal:attributes="href folder/tab/url"-->
-             <!--tal:content="tab/tab/title" />-->
-
         </div>
     </div>
 </div>
+
+
+<tal:block condition="nothing">
+<metal:block define-macro="subfolder">
+  <ul class="portlet-menutree-static-second">
+    <li tal:repeat="folder folder/subfolders" tal:attributes="class python:folder['current'] and 'selected' or ''">
+        <a tal:attributes="href folder/url" tal:content="folder/folder/title" />
+        <span tal:condition="folder/itemsCount"
+              tal:content="string:(${folder/itemsCount})"></span>
+        <metal:block use-macro="view/template/macros/subfolder" />
+    </li>
+  </ul>
+  <div class="visualClear"></div>
+</metal:block>
+</tal:block>

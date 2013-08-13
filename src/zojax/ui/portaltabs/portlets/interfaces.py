@@ -52,7 +52,4 @@ class IStaticMenuPortlet(IMenuPortletBase):
 
 
 class IFoldersMenuPortlet(IMenuPortletBase):
-
-    level = schema.Int(title=_(u'Recursion level'),
-                       description=_(u'0 - unrestricted'),
-                       default=0)
+    pass

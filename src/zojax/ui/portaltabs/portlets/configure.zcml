@@ -38,7 +38,7 @@
      class=".portlet.StaticMenuPortletView" />
 
   <zojax:portlet
-     name="portlet.portaltabs.folders"
+     name="portlet.folders"
      title="Folders Portlet"
      schema=".interfaces.IFoldersMenuPortlet"
      class=".portlet.FoldersMenuPortlet" />
@@ -46,7 +46,7 @@
   <zojax:pagelet
      for=".portlet.FoldersMenuPortlet"
      type="portlet.view"
-     class=".portlet.FoldersMenuPortletView" />
+     template="foldersportlet.pt" />
 
   <include package=".xmltree" />
 
