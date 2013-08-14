@@ -181,8 +181,6 @@ class FoldersMenuPortlet(object):
         return root
 
     def update(self):
-        root_folders = self.getSubFolders(self.getRoot())
-
         def result(folders):
             for folder in folders:
                 yield {'folder': folder,
@@ -190,4 +188,5 @@ class FoldersMenuPortlet(object):
                        'subfolders': result(self.getSubFolders(folder)),
                        'current': folder == self.context,
                        'itemsCount': len(folder) - 1}
-        self.folders = result(root_folders)
+        self.folders = result([self.getRoot()])
+
