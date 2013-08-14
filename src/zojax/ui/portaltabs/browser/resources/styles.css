@@ -122,3 +122,6 @@ ul.tree-node {
 ul.tree-root {
     margin: -5px 0 0 4px;
 }
+.current {
+    background-color: #D5D5D5;
+}

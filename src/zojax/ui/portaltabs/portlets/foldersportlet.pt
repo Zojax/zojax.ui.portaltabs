@@ -3,12 +3,14 @@
     <div class="z-portlet-body">
         <div class="z-portlet-item">
             <ul class="tree-node tree-root">
-                <li tal:repeat="folder folders" class="tree-node" >
+                <li tal:repeat="folder folders">
                     <span class="folder"></span>
-                    <a tal:attributes="href folder/url; class python:folder['current'] and 'selected' or ''"
-                       tal:content="folder/folder/title"/>
-                    <span tal:condition="folder/itemsCount"
-                          tal:content="string:(${folder/itemsCount})"></span>
+                    <span tal:attributes="class python:folder['current'] and 'current' or ''">
+                        <a tal:attributes="href folder/url"
+                           tal:content="folder/folder/title"/>
+                        <span tal:condition="folder/itemsCount"
+                              tal:content="string:(${folder/itemsCount})"></span>
+                    </span>
                     <metal:block use-macro="view/template/macros/subfolder" />
                 </li>
             </ul>
@@ -21,11 +23,14 @@
 <metal:block define-macro="subfolder">
   <ul class="tree-node">
     <li tal:repeat="folder folder/subfolders" class="tree-node">
-        <span class="folder"></span>
-        <a tal:attributes="href folder/url" tal:content="folder/folder/title" />
-        <span tal:condition="folder/itemsCount"
-              tal:content="string:(${folder/itemsCount})"></span>
-        <metal:block use-macro="view/template/macros/subfolder" />
+                    <span class="folder"></span>
+                    <span tal:attributes="class python:folder['current'] and 'current' or ''">
+                        <a tal:attributes="href folder/url"
+                           tal:content="folder/folder/title"/>
+                        <span tal:condition="folder/itemsCount"
+                              tal:content="string:(${folder/itemsCount})"></span>
+                    </span>
+                    <metal:block use-macro="view/template/macros/subfolder" />
     </li>
   </ul>
   <div class="visualClear"></div>

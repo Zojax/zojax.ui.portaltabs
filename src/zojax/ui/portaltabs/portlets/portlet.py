@@ -174,8 +174,14 @@ class FoldersMenuPortlet(object):
     def getSubFolders(self, root):
         return [folder for folder in root.values() if folder.__class__ == DocumentsContainer]
 
+    def getRoot(self):
+        root = self.context
+        while root.__class__ == DocumentsContainer:
+            root = root.__parent__
+        return root
+
     def update(self):
-        root_folders = self.getSubFolders(self.context)
+        root_folders = self.getSubFolders(self.getRoot())
 
         def result(folders):
             for folder in folders:
