@@ -39,7 +39,7 @@
 
   <zojax:portlet
      name="portlet.folders"
-     title="Folders Portlet"
+     title="Document folders"
      schema=".interfaces.IFoldersMenuPortlet"
      class=".portlet.FoldersMenuPortlet" />
 
