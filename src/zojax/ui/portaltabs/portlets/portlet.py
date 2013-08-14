@@ -187,6 +187,6 @@ class FoldersMenuPortlet(object):
                        'url': absoluteURL(folder, self.request),
                        'subfolders': result(self.getSubFolders(folder)),
                        'current': folder == self.context,
-                       'itemsCount': len(folder) if not 'members' in [k for k in folder.keys()] else len(folder) - 1}
+                       'itemsCount': len(folder) if not 'members' in list(folder.keys()) else len(folder) - 1}
         self.folders = result([self.getRoot()])
 
