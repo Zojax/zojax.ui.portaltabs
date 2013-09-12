@@ -188,5 +188,5 @@ class FoldersMenuPortlet(object):
                        'subfolders': result(self.getSubFolders(folder)),
                        'current': folder == self.context,
                        'itemsCount': len(folder) if not 'members' in list(folder.keys()) else len(folder) - 1}
-        self.folders = result([self.getRoot()])
+        self.folders = result(self.getSubFolders(self.getRoot()))
 
