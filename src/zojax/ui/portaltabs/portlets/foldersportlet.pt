@@ -2,14 +2,13 @@
     <h2 class="z-portlet-header" tal:content="python:context.label is None and context.title or context.label">Title</h2>
     <div class="z-portlet-body">
         <div class="z-portlet-item">
-            <ul class="tree-node tree-root">
+            <ul class="tree-node">
                 <li tal:repeat="folder folders">
-                    <span class="folder"></span>
+                    <span tal:attributes="class python:folder['isOpen'] and 'control opened' or 'control closed'"></span>
+                    <span class="item folder"></span>
                     <span tal:attributes="class python:folder['current'] and 'current' or ''">
-                        <a tal:attributes="href folder/url"
-                           tal:content="folder/folder/title"/>
-                        <span tal:condition="folder/itemsCount"
-                              tal:content="string:(${folder/itemsCount})"></span>
+                        <a tal:attributes="href folder/url" tal:content="folder/folder/title"/>
+                        <span tal:condition="folder/itemsCount" tal:content="string:(${folder/itemsCount})"></span>
                     </span>
                     <metal:block use-macro="view/template/macros/subfolder" />
                 </li>
@@ -21,16 +20,22 @@
 
 <tal:block condition="nothing">
 <metal:block define-macro="subfolder">
-  <ul class="tree-node">
+  <ul tal:attributes="class python:folder['isOpen'] and 'tree-node open' or 'tree-node closed'">
     <li tal:repeat="folder folder/subfolders" class="tree-node">
-                    <span class="folder"></span>
-                    <span tal:attributes="class python:folder['current'] and 'current' or ''">
-                        <a tal:attributes="href folder/url"
-                           tal:content="folder/folder/title"/>
-                        <span tal:condition="folder/itemsCount"
-                              tal:content="string:(${folder/itemsCount})"></span>
-                    </span>
-                    <metal:block use-macro="view/template/macros/subfolder" />
+        <span tal:attributes="class python:folder['isOpen'] and 'control opened' or 'control closed'"></span>
+        <span class="item folder"></span>
+        <span tal:attributes="class python:folder['current'] and 'current' or ''">
+            <a tal:attributes="href folder/url" tal:content="folder/folder/title"/>
+            <span tal:condition="folder/itemsCount" tal:content="string:(${folder/itemsCount})"></span>
+        </span>
+        <metal:block use-macro="view/template/macros/subfolder" />
+    </li>
+    <li tal:repeat="item folder/items" class="tree-node">
+        <span class="elbow"></span>
+        <span class="item document"></span>
+        <span>
+            <a tal:attributes="href item/url" tal:content="item/item/title"></a>
+        </span>
     </li>
   </ul>
   <div class="visualClear"></div>

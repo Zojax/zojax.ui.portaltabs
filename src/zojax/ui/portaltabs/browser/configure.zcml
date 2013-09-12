@@ -63,7 +63,14 @@
   <zojax:resource
      name="plus.gif"
      file="resources/images/plus.gif" />
-     
+
+  <zojax:resourceinclude
+     name="folders-tree.js"
+     library="zojax" type="javascript"
+     require="jquery"
+     file="resources/folders-tree.js"/>
+
+
   <!-- css resources -->
   <zojax:resourcedirectory
      name="portaltabs"

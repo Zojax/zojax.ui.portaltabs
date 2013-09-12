@@ -13,6 +13,8 @@
 ##############################################################################
 from zojax.catalog.interfaces import ICatalog
 from zojax.content.documents.container import DocumentsContainer
+from zojax.content.documents.interfaces import IDocumentsContainer
+from zojax.isodocument.document import ISODocument
 from zope.traversing.browser.absoluteurl import absoluteURL
 """
 
@@ -174,19 +176,42 @@ class FoldersMenuPortlet(object):
     def getSubFolders(self, root):
         return [folder for folder in root.values() if folder.__class__ == DocumentsContainer]
 
-    def getRoot(self):
-        root = self.context
-        while root.__class__ == DocumentsContainer:
-            root = root.__parent__
-        return root
+    def getItems(self, root):
+        for item in root.values():
+            if item.__class__ == ISODocument:
+                yield {
+                    'item': item,
+                    'url': absoluteURL(item, self.request),
+                }
+
+    # def getRoot(self):
+    #     root = self.context
+    #     self.parents = [self.context.__parents__]
+    #     while root.__class__ == DocumentsContainer:
+    #         root = root.__parent__
+    #         self.parents.append(root)
+    #     return root
+
+
+
+    def isFolderOpened(self):
+        return IDocumentsContainer.providedBy(self.context)
 
     def update(self):
+        root = self.context
+        parents = [root]
+        while root.__class__ == DocumentsContainer:
+            root = root.__parent__
+            parents.append(root)
+
         def result(folders):
             for folder in folders:
                 yield {'folder': folder,
                        'url': absoluteURL(folder, self.request),
+                       'isOpen': folder in parents,
                        'subfolders': result(self.getSubFolders(folder)),
                        'current': folder == self.context,
-                       'itemsCount': len(folder) if not 'members' in list(folder.keys()) else len(folder) - 1}
-        self.folders = result(self.getSubFolders(self.getRoot()))
+                       'itemsCount': len(folder) if not 'members' in list(folder.keys()) else len(folder) - 1,
+                       'items': self.getItems(folder)}
+        self.folders = result(self.getSubFolders(root))
 

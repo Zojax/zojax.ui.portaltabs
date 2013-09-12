@@ -110,18 +110,45 @@
   }
 }
 
-span.folder {
-    background: url("portaltabs/images/folder.png") no-repeat;
+.item {
     padding-left: 20px;
     padding-top: 2px;
 }
-ul.tree-node {
-    list-style: none;
+.control {
+    padding-left: 15px;
+    padding-top: 2px;
+    background: url("portaltabs/images/elbow.gif") no-repeat;
 }
 
-ul.tree-root {
-    margin: -5px 0 0 4px;
+span.folder{
+    background: url("portaltabs/images/folder.png") no-repeat;
+}
+span.document{
+    background: url("portaltabs/images/document.png") no-repeat;
+}
+span.opened{
+    background: url("portaltabs/images/minus.gif") no-repeat;
+}
+span.closed{
+    background: url("portaltabs/images/plus.gif") no-repeat;
+}
+.elbow{
+    background: url("portaltabs/images/elbow.gif") no-repeat;
+    padding-left: 15px;
+    padding-top: 2px;
+}
+
+.tree-node {
+    list-style: none;
+    margin: 0 5px;
+}
+
+.tree-node li{
+    margin-bottom: 0;
 }
 .current {
     background-color: #D5D5D5;
+}
+ul.closed{
+    display: none;
 }
