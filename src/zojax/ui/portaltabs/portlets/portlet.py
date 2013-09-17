@@ -11,11 +11,15 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zc.shortcut import Shortcut
 from zojax.catalog.interfaces import ICatalog
 from zojax.content.documents.container import DocumentsContainer
 from zojax.content.documents.interfaces import IDocumentsContainer
 from zojax.isodocument.document import ISODocument
+from zojax.members.members import Members
 from zope.traversing.browser.absoluteurl import absoluteURL
+
+
 """
 
 $Id$
@@ -35,9 +39,8 @@ from zojax.portlet.cache import PortletModificationTag, PortletId
 from zojax.ui.portaltabs.cache import PortalTabsTag
 from zojax.portlet.browser.portlet import publicAbsoluteURL
 
-from zojax.ui.portaltabs.interfaces import IPortalTabsConfiglet, IPortalTab, \
-                                            IObjectPortalTab
-                                            
+from zojax.ui.portaltabs.interfaces import IPortalTabsConfiglet, IPortalTab, IObjectPortalTab
+
 from interfaces import IStaticMenuPortlet
 
 
@@ -48,11 +51,10 @@ def ViewAndContext(object, instance, *args, **kw):
         context = instance.context
     return {'context': getPath(instance.context),
             'view': instance.view is not None and getPath(instance.view) or '',
-            'principal': instance.request.principal.id,}
+            'principal': instance.request.principal.id, }
 
 
 class MenuPortlet(object):
-    
     headerImage = FileFieldProperty(IStaticMenuPortlet['headerImage'])
 
     def update(self):
@@ -85,11 +87,11 @@ class MenuPortlet(object):
         url = publicAbsoluteURL(self, self.request)
         self.id = url.replace(site_url, '').replace('/', '-').replace('.', '-')[1:]
         context_url = context_url in self.request.URL[-1] and self.request.URL[-1] or context_url
-        includeInplaceSource(menuinit%{'appUrl': site_url,
-                                       'currUrl': context_url,
-                                       'fromTab': fromTab,
-                                       'hideSiblings': self.hideSiblings and 1 or 0,
-                                       'id': self.id},
+        includeInplaceSource(menuinit % {'appUrl': site_url,
+                                         'currUrl': context_url,
+                                         'fromTab': fromTab,
+                                         'hideSiblings': self.hideSiblings and 1 or 0,
+                                         'id': self.id},
                              required=('zojax.ui.folders',))
 
     def isAvailable(self):
@@ -101,8 +103,8 @@ class MenuPortlet(object):
             except AttributeError:
                 context = self.context
         return bool(getMultiAdapter(
-                (context, self.request),
-                name='menuSingleBranchTree.xml').branch_utility()[1])
+            (context, self.request),
+            name='menuSingleBranchTree.xml').branch_utility()[1])
 
     @cache(PortletId(), ViewAndContext, PortletModificationTag, PortalTabsTag)
     def render(self):
@@ -119,7 +121,6 @@ menuinit = """
 
 
 class StaticMenuPortlet(object):
-    
     headerImage = FileFieldProperty(IStaticMenuPortlet['headerImage'])
 
     def update(self):
@@ -152,10 +153,11 @@ class StaticMenuPortlet(object):
             for tab in tabs:
                 yield {'tab': tab,
                        'submenu': (
-                        (self.level and level<self.level) or not self.level)
-                       and list(result(tab.getSubmenu(), level+1)) or [],
+                                      (self.level and level < self.level) or not self.level)
+                                  and list(result(tab.getSubmenu(), level + 1)) or [],
                        'level': level
-                       }
+                }
+
         self.tabs = list(result(tabs, 1))
 
     def isAvailable(self):
@@ -167,20 +169,21 @@ class StaticMenuPortlet(object):
 
 
 class StaticMenuPortletView(object):
-
     template = ViewPageTemplateFile('staticportlet.pt')
 
 
 class FoldersMenuPortlet(object):
-
     def getSubFolders(self, root):
-        return [folder for folder in root.values() if folder.__class__ == DocumentsContainer]
+        return [getattr(folder, 'target', '') if hasattr(folder, 'target') else folder for folder in root.values() if
+                folder.__class__ == DocumentsContainer or getattr(folder, 'target', '').__class__ == DocumentsContainer]
 
     def getItems(self, root):
         for item in root.values():
-            if item.__class__ == ISODocument:
+            if item.__class__ not in [Members, Shortcut, DocumentsContainer]:
                 yield {
                     'item': item,
+                    'title': getattr(item.target, 'title', '') if hasattr(item, 'target') else getattr(item, 'title',
+                                                                                                       ''),
                     'url': absoluteURL(item, self.request),
                 }
 
@@ -191,8 +194,6 @@ class FoldersMenuPortlet(object):
     #         root = root.__parent__
     #         self.parents.append(root)
     #     return root
-
-
 
     def isFolderOpened(self):
         return IDocumentsContainer.providedBy(self.context)
@@ -213,5 +214,6 @@ class FoldersMenuPortlet(object):
                        'current': folder == self.context,
                        'itemsCount': len(folder) if not 'members' in list(folder.keys()) else len(folder) - 1,
                        'items': self.getItems(folder)}
+
         self.folders = result(self.getSubFolders(root))
 

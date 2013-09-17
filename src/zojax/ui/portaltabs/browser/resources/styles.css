@@ -119,13 +119,6 @@
     padding-top: 2px;
     background: url("portaltabs/images/elbow.gif") no-repeat;
 }
-
-span.folder{
-    background: url("portaltabs/images/folder.png") no-repeat;
-}
-span.document{
-    background: url("portaltabs/images/document.png") no-repeat;
-}
 span.opened{
     background: url("portaltabs/images/minus.gif") no-repeat;
 }
@@ -140,7 +133,7 @@ span.closed{
 
 .tree-node {
     list-style: none;
-    margin: 0 5px;
+    margin: 0 9px;
 }
 
 .tree-node li{

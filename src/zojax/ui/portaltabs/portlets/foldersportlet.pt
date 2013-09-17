@@ -4,8 +4,9 @@
         <div class="z-portlet-item">
             <ul class="tree-node">
                 <li tal:repeat="folder folders">
-                    <span tal:attributes="class python:folder['isOpen'] and 'control opened' or 'control closed'"></span>
-                    <span class="item folder"></span>
+                    <span tal:condition="folder/itemsCount" tal:attributes="class python:folder['isOpen'] and 'control opened' or 'control closed'"></span>
+                    <span tal:condition="python:not folder.itemsCount" class="control"></span>
+                    <tal:block tal:content="structure folder/folder/@@zmi_icon"></tal:block>
                     <span tal:attributes="class python:folder['current'] and 'current' or ''">
                         <a tal:attributes="href folder/url" tal:content="folder/folder/title"/>
                         <span tal:condition="folder/itemsCount" tal:content="string:(${folder/itemsCount})"></span>
@@ -22,8 +23,9 @@
 <metal:block define-macro="subfolder">
   <ul tal:attributes="class python:folder['isOpen'] and 'tree-node open' or 'tree-node closed'">
     <li tal:repeat="folder folder/subfolders" class="tree-node">
-        <span tal:attributes="class python:folder['isOpen'] and 'control opened' or 'control closed'"></span>
-        <span class="item folder"></span>
+        <span tal:condition="folder/itemsCount" tal:attributes="class python:folder['isOpen'] and 'control opened' or 'control closed'"></span>
+        <span tal:condition="python:not folder.itemsCount" class="control"></span>
+        <tal:block tal:content="structure folder/folder/@@zmi_icon"></tal:block>
         <span tal:attributes="class python:folder['current'] and 'current' or ''">
             <a tal:attributes="href folder/url" tal:content="folder/folder/title"/>
             <span tal:condition="folder/itemsCount" tal:content="string:(${folder/itemsCount})"></span>
@@ -32,9 +34,9 @@
     </li>
     <li tal:repeat="item folder/items" class="tree-node">
         <span class="elbow"></span>
-        <span class="item document"></span>
+        <tal:block tal:content="structure item/item/@@zmi_icon"></tal:block>
         <span>
-            <a tal:attributes="href item/url" tal:content="item/item/title"></a>
+            <a tal:attributes="href item/url" tal:content="item/title"></a>
         </span>
     </li>
   </ul>
