@@ -127,13 +127,13 @@ span.closed{
 }
 .elbow{
     background: url("portaltabs/images/elbow.gif") no-repeat;
-    padding-left: 15px;
+    padding-left: 18px;
     padding-top: 2px;
 }
 
 .tree-node {
     list-style: none;
-    margin: 0 9px;
+    margin: 0 8px;
 }
 
 .tree-node li{
