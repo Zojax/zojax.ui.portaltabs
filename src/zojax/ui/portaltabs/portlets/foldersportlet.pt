@@ -8,7 +8,7 @@
                     <span tal:condition="python:not folder.itemsCount" class="control"></span>
                     <tal:block tal:content="structure folder/folder/@@zmi_icon"></tal:block>
                     <span tal:attributes="class python:folder['current'] and 'current' or ''">
-                        <a tal:attributes="href folder/url" tal:content="folder/folder/title"/>
+                        <a tal:attributes="href folder/url" tal:content="folder/title"/>
                         <span tal:condition="folder/itemsCount" tal:content="string:(${folder/itemsCount})"></span>
                     </span>
                     <metal:block use-macro="view/template/macros/subfolder" />
@@ -27,7 +27,7 @@
         <span tal:condition="python:not folder.itemsCount" class="control"></span>
         <tal:block tal:content="structure folder/folder/@@zmi_icon"></tal:block>
         <span tal:attributes="class python:folder['current'] and 'current' or ''">
-            <a tal:attributes="href folder/url" tal:content="folder/folder/title"/>
+            <a tal:attributes="href folder/url" tal:content="folder/title"/>
             <span tal:condition="folder/itemsCount" tal:content="string:(${folder/itemsCount})"></span>
         </span>
         <metal:block use-macro="view/template/macros/subfolder" />

@@ -17,6 +17,7 @@ from zojax.content.documents.container import DocumentsContainer
 from zojax.content.documents.interfaces import IDocumentsContainer
 from zojax.isodocument.document import ISODocument
 from zojax.members.members import Members
+from zope.security.interfaces import Unauthorized
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 
@@ -174,29 +175,34 @@ class StaticMenuPortletView(object):
 
 class FoldersMenuPortlet(object):
     def getSubFolders(self, root):
-        return [getattr(folder, 'target', '') if hasattr(folder, 'target') else folder for folder in root.values() if
-                folder.__class__ == DocumentsContainer or getattr(folder, 'target', '').__class__ == DocumentsContainer]
+        try:
+            return [getattr(folder, 'target', '') if hasattr(folder, 'target') else folder for folder in root.values() if
+                    folder.__class__ == DocumentsContainer or getattr(folder, 'target', '').__class__ == DocumentsContainer]
+        except Unauthorized:
+            return []
 
     def getItems(self, root):
-        for item in root.values():
-            if item.__class__ not in [Members, Shortcut, DocumentsContainer]:
-                yield {
-                    'item': item,
-                    'title': getattr(item.target, 'title', '') if hasattr(item, 'target') else getattr(item, 'title',
-                                                                                                       ''),
-                    'url': absoluteURL(item, self.request),
-                }
+        try:
+            for item in root.values():
+                if item.__class__ not in [Members, Shortcut, DocumentsContainer]:
+                        yield {
+                            'item': item,
+                            'title': getattr(item.target, 'title', '') if hasattr(item, 'target') else getattr(item, 'title',
+                                                                                                               ''),
+                            'url': absoluteURL(item, self.request),
+                        }
+        except Unauthorized:
+            pass
 
-    # def getRoot(self):
-    #     root = self.context
-    #     self.parents = [self.context.__parents__]
-    #     while root.__class__ == DocumentsContainer:
-    #         root = root.__parent__
-    #         self.parents.append(root)
-    #     return root
 
     def isFolderOpened(self):
         return IDocumentsContainer.providedBy(self.context)
+
+    def getItemsCount(self, folder):
+        try:
+            return len(folder) if not 'members' in list(folder.keys()) else len(folder) - 1
+        except Unauthorized:
+            return 0
 
     def update(self):
         root = self.context
@@ -207,13 +213,19 @@ class FoldersMenuPortlet(object):
 
         def result(folders):
             for folder in folders:
-                yield {'folder': folder,
-                       'url': absoluteURL(folder, self.request),
-                       'isOpen': folder in parents,
-                       'subfolders': result(self.getSubFolders(folder)),
-                       'current': folder == self.context,
-                       'itemsCount': len(folder) if not 'members' in list(folder.keys()) else len(folder) - 1,
-                       'items': self.getItems(folder)}
+                try:
+
+                    yield {'title': folder.title,
+                           'folder': folder,
+                           'url': absoluteURL(folder, self.request),
+                           'isOpen': folder in parents,
+                           'subfolders': result(self.getSubFolders(folder)),
+                           'current': folder == self.context,
+                           'itemsCount': self.getItemsCount(folder),
+                           'items': self.getItems(folder)}
+                except Unauthorized:
+                    pass
+
 
         self.folders = result(self.getSubFolders(root))
 
