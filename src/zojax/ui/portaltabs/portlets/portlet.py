@@ -228,4 +228,5 @@ class FoldersMenuPortlet(object):
 
 
         self.folders = result(self.getSubFolders(root))
+        self.has_folders = len(self.getSubFolders(root))
 

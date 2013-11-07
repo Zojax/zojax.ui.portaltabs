@@ -1,3 +1,4 @@
+<tal:block condition="context/has_folders">
 <div class="z-portlet" i18n:domain="zojax.ui.portaltabs" tal:define="folders context/folders">
     <h2 class="z-portlet-header" tal:content="python:context.label is None and context.title or context.label">Title</h2>
     <div class="z-portlet-body">
@@ -17,7 +18,7 @@
         </div>
     </div>
 </div>
-
+</tal:block>
 
 <tal:block condition="nothing">
 <metal:block define-macro="subfolder">
