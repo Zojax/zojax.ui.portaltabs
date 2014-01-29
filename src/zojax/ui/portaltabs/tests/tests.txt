@@ -159,21 +159,16 @@ Menu Tree Portlet
     >>> print actor.contents
     <html>
     ...
-    <script type="text/javascript" src="http://localhost/.../zojax.ui.portaltabs.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
         new menu.MenuTree('content-portlets-columns-left-portlet-portaltabs', 'http://localhost/', 'http://localhost/content/', '', 0);
       });
     </script>
     ...
-    ...<div class="z-portlet portlet-menutree">
-      <h2 class="z-portlet-header">Menu</h2>
       <div class="z-portlet-body">
         <div id="menutreecontents" class="z-portlet-item">
              <div xmlns="http://www.zope.org/zope3xmltree" id="content-portlets-columns-left-portlet-portaltabs">Loading...</div>
         </div>
-      </div>
-    </div>...
     ...
     </html>
 
