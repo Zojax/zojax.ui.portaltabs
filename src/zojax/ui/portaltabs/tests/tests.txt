@@ -105,14 +105,6 @@ Register portal tab for content
 Enable tab for content
 ----------------------
 
-We should not see portaltabs extension without extension support for object:
-
-    >>> actor.open('http://localhost/content/context.html')
-    >>> actor.getLink('Presentation').click()
-    Traceback (most recent call last):
-    ...
-    LinkNotFoundError
-
 So we should enable extension support:
     >>> interface.alsoProvides(root['content'], IExtensible)
 
